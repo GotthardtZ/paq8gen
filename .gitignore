@@ -1,0 +1,26 @@
+.clang-format
+.idea
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+cmake-build-debug
+compile_commands.json
+build/*.o
+build/_error.txt
+build/*.exe
+paq8gen
+paq8gen.cbp
+CMakeFiles
+test
+experiment
+docs
+*.paq8gen*
+train_bench
+afl-in
+afl-out
+# Visual Studio Specific ignores
+.vs/
+x64/
+release/
+debug/
+packages/

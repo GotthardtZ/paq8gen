@@ -1,0 +1,22 @@
+﻿---------------
+VERSION HISTORY
+---------------
+
+Newest entries are at the bottom.
+Dates are in YYYY.MM.DD format.
+
+
+paq8gen_v1 by Zoltán Gotthardt
+2020.01.02
+- Forked form paq8px_v200 (https://github.com/hxim/paq8px)
+- Removed most models except MatchModel, NormalModel, WordModel, DMCForect/DMCModel, LSTMModel
+- Removed most transformations except EOL
+- Removed most detections except Text
+- Removed all pre-training
+- Removed most command line options except Adaptive Learning Rate (A), LSTM model (L)
+- Removed some NormalModel mixer contexts, removed the fast order 1 model
+- Renamed WordModel to LineModel, removed all contexts except some linemodel ones
+- Increased NormalModel contexts from 14->24
+- Increased MatchModel minimum match length: 5->16, stepsize: 2->8
+- Tuned mixer scaling factor: 940, 80 -> 2048, 256
+

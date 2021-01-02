@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="file">
+      <UniqueIdentifier>{e9d79d62-d43f-4cd5-a8cc-b85122735072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="filter">
+      <UniqueIdentifier>{9640ca62-e1c3-485e-b510-770803fd1825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model">
+      <UniqueIdentifier>{b7cb947a-b9cc-43a3-91e9-f0b49f39101f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\lstm">
+      <UniqueIdentifier>{73abd1bc-6333-4b69-a064-57ad2414ab30}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AdaptiveMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="APM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="APM1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContextMap2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ilog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IndirectMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mixer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MixerFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Models.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Predictor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramChecker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shared.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SmallStationaryContextMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SSE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StateTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StationaryMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateBroadcaster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="file\File.cpp">
+      <Filter>file</Filter>
+    </ClCompile>
+    <ClCompile Include="file\FileDisk.cpp">
+      <Filter>file</Filter>
+    </ClCompile>
+    <ClCompile Include="file\FileName.cpp">
+      <Filter>file</Filter>
+    </ClCompile>
+    <ClCompile Include="file\FileTmp.cpp">
+      <Filter>file</Filter>
+    </ClCompile>
+    <ClCompile Include="filter\TextParserStateInfo.cpp">
+      <Filter>filter</Filter>
+    </ClCompile>
+    <ClCompile Include="model\ContextModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\DmcForest.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\DmcModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\DmcNode.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\MatchModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="model\NormalModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="Clz.hpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArithmeticEncoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LargeStationaryMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="paq8gen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="model\LineModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AdaptiveMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="APM.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="APM1.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContextMap2.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DivisionTable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Encoder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Hash.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ilog.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndirectContext.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndirectMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPredictor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mixer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MixerFactory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Models.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Predictor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramChecker.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RingBuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shared.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simd.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimdMixer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SmallStationaryContextMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Squash.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SSE.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StateTable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StationaryMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stretch.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="String.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateBroadcaster.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="file\File.hpp">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="file\FileDisk.hpp">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="file\FileName.hpp">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="file\FileTmp.hpp">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="file\fileUtils.hpp">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="file\fileUtils2.hpp">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="filter\eol.hpp">
+      <Filter>filter</Filter>
+    </ClInclude>
+    <ClInclude Include="filter\Filter.hpp">
+      <Filter>filter</Filter>
+    </ClInclude>
+    <ClInclude Include="filter\Filters.hpp">
+      <Filter>filter</Filter>
+    </ClInclude>
+    <ClInclude Include="filter\TextParserStateInfo.hpp">
+      <Filter>filter</Filter>
+    </ClInclude>
+    <ClInclude Include="model\ContextModel.hpp">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\DmcForest.hpp">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\DmcModel.hpp">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\DmcNode.hpp">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\MatchModel.hpp">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="model\NormalModel.hpp">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="BitCount.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ArithmeticEncoder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VLI.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\Activations.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\Adam.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\CosineDecay.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\IDecay.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\IOptimizer.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\Layer.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\Lstm.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\LstmFactory.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\LstmLayer.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\LstmModel.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\PolynomialDecay.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\SimdFunctions.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="lstm\SimdLstmModel.hpp">
+      <Filter>Header Files\lstm</Filter>
+    </ClInclude>
+    <ClInclude Include="LargeStationaryMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bucket16.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LargeIndirectContext.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HashElementForContextMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HashElementForStationaryMap.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="model\LineModel.hpp">
+      <Filter>model</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

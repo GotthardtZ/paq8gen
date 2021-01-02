@@ -1,0 +1,131 @@
+﻿
+                              PAQ8GEN README
+
+---------
+COPYRIGHT
+---------
+
+    Copyright (C) 2008 Matt Mahoney, Serge Osnach, Alexander Ratushnyak,
+    Bill Pettis, Przemyslaw Skibinski, Matthew Fite, wowtiger, Andrew Paterson,
+    Jan Ondrus, Andreas Morphis, Pavel L. Holoborodko, Kaido Orav, Simon Berger,
+    Neill Corlett, Márcio Pais, Andrew Epstein, Mauro Vezzosi, Zoltán Gotthardt,
+    Sebastian Lehmann, Moisés Cardona, Byron Knoll
+
+    We would like to express our gratitude for the endless support of many 
+    contributors who encouraged PAQ8PX/PAQ8GEN development with ideas, testing, 
+    compiling, debugging:
+    LovePimple, Skymmer, Darek, Stephan Busch, m^2, Christian Schneider,
+    pat357, Rugxulo, Gonzalo, a902cd23, pinguin2, Luca Biondi - and many others.
+
+-------
+LICENCE
+-------
+
+    See: LICENSE
+
+    For a summary of your rights and obligations in plain language visit 
+    https://tldrlegal.com/license/gnu-general-public-license-v2
+
+-----
+ABOUT
+-----
+
+PAQ is a series of experimental lossless data compression software that have gone 
+through collaborative development to top rankings on several benchmarks measuring 
+compression ratio (although at the expense of speed and memory usage).
+
+PAQ8GEN (this branch) is one of the longest living branch of the PAQ series forked from 
+PAQ8PX v200 by Zoltán Gotthardt in 2021. This branch is specialized (but not limited) to
+(genomic) sequencing data.
+For history and current state of development visit https://encode.su/threads/342-paq8gen
+
+-----------------
+HOW DOES IT WORK?
+-----------------
+
+Data compression is carried out by compressing the input file(s) bit by bit using 
+context mixing i.e. mixing predictions from many models. 
+
+---------------
+PAQ8GEN ARCHIVES
+---------------
+
+A PAQ8GEN archive contains files in a highly compressed format.
+
+You can recognize a PAQ8GEN archive from its file extension. The file extension reflects 
+the exact PAQ8GEN version that created the archive. You may also examine the first few
+bytes of the file. If it reads "paq8gen" than it is (most probably) a PAQ8GEN archive. 
+Exact version information cannot be inferred from the archive content.
+
+A PAQ8GEN archive may contain only a single file without any file attributes. Only the 
+file content is preserved.  There is no built-in multiple file support or folder 
+compression support.
+
+More notes:
+Files and archives larger than 2 GB are not (yet) supported.
+PAQ8GEN archives are not compatible with previous or future PAQ8GEN releases.
+
+----------
+HOW TO USE
+----------
+
+This software is portable, you don't need to install it.
+
+You may copy paq8gen.exe to the folder where your files to be compressed are located
+and launch PAQ8GEN from the command line (cmd.exe in Windows, a terminal of your choice 
+in Linux and macOS). 
+
+----------------------
+COMMAND LINE INTERFACE
+----------------------
+
+A graphical user interface is not provided, PAQ8GEN runs from the command line.
+See the help screen for command line options.
+For the help screen just launch PAQ8GEN from the command line without any options.
+
+--------------
+HOW TO COMPILE
+--------------
+
+Building PAQ8GEN requires a C++17 capable C++ compiler:
+https://en.cppreference.com/w/cpp/compiler_support#cpp17
+
+Windows 
+If you are a Windows user you don't need to compile the source. Just grab the latest
+executable bundled with the source from the https://encode.su/threads/342-paq8gen thread.
+If you would like to build an executable yourself you may use the Visual Studio solution
+file or in case of Mingw-w64 see the "build-mingw-w64-generic-publish.cmd" batch file
+in the build subfolder.
+
+Linux/macOS
+gcc/clang users on Linux/macOS may use the following commands to build:
+
+ sudo apt-get install build-essential
+ cd build
+ cmake ..
+ make
+
+The following compilers were tested and verified to compile/work correctly
+in this release  or in an earlier release (mostly paq8px):
+
+  - Visual Studio 2019 Community Edition (Windows)
+  - MinGW-w64 9.3.0 (Windows)
+  - GCC 8.3.0 (Lubuntu)
+
+Note:
+
+ We build and test 64-bit releases, 32-bit releases are seldom built or tested. A known
+ limitation of 32-bit releases is the 2 GB memory barrier.
+ 
+--------------
+FOR DEVELOPERS
+--------------
+
+When you make a new release:
+
+  - Please update the version number in the "Versioning" section in the paq8gen.cpp source file.
+  - Please append a short description of your modifications to the CHANGELOG file.
+  - Always publish a static build (link the required library files statically).
+  - Always publish a build for the general public (e.g. don't use -march=native).
+  - Before publishing your build, please carry out some basic tests. Run your tests
+    with asserts on (remove the "NDEBUG" option).
