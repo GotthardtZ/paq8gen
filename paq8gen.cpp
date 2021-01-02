@@ -7,7 +7,7 @@
 //////////////////////// Versioning ////////////////////////////////////////
 
 #define PROGNAME     "paq8gen"
-#define PROGVERSION  "1"  //update version here before publishing your changes
+#define PROGVERSION  "2"  //update version here before publishing your changes
 #define PROGYEAR     "2020"
 
 
