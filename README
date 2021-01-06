@@ -36,8 +36,8 @@ compression ratio (although at the expense of speed and memory usage).
 
 PAQ8GEN (this branch) is one of the longest living branch of the PAQ series forked from 
 PAQ8PX v200 by Zoltán Gotthardt in 2021. This branch is specialized (but not limited) to
-(genomic) sequencing data.
-For history and current state of development visit https://encode.su/threads/342-paq8gen
+(genomic) sequencing data. For history and current state of development visit 
+the encode.su forum thread (https://encode.su/threads/3549-paq8gen-sequence-compressor)
 
 -----------------
 HOW DOES IT WORK?
@@ -92,7 +92,7 @@ https://en.cppreference.com/w/cpp/compiler_support#cpp17
 
 Windows 
 If you are a Windows user you don't need to compile the source. Just grab the latest
-executable bundled with the source from the https://encode.su/threads/342-paq8gen thread.
+executable from the github repository: https://github.com/GotthardtZ/paq8gen/releases
 If you would like to build an executable yourself you may use the Visual Studio solution
 file or in case of Mingw-w64 see the "build-mingw-w64-generic-publish.cmd" batch file
 in the build subfolder.
