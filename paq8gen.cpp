@@ -7,7 +7,7 @@
 //////////////////////// Versioning ////////////////////////////////////////
 
 #define PROGNAME     "paq8gen"
-#define PROGVERSION  "2"  //update version here before publishing your changes
+#define PROGVERSION  "2fixa"  //update version here before publishing your changes
 #define PROGYEAR     "2020"
 
 
@@ -200,6 +200,9 @@ auto processCommandLine(int argc, char **argv) -> int {
           //process optional compression switches
           for( ; j < argLen; j++ ) {
             switch( argv[i][j] & 0xDFU ) {
+              case 'A':
+                shared.options |= OPTION_ADAPTIVE;
+                break;
               case 'L':
                 shared.options |= OPTION_LSTM;
                 break;
