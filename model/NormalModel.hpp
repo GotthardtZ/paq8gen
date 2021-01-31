@@ -4,27 +4,24 @@
 #include "../ContextMap2.hpp"
 
 /**
- * Model for order 0-14 contexts
- * Contexts are hashes of previous 0..14 bytes.
- * Order 0..6, 8 and 14 are used for prediction.
- * Note: order 7+ contexts are modeled by matchModel as well.
+ * Model for order 0-24 contexts
+ * Contexts are hashes of previous 0..24 bytes.
+ * Note: order 8+ contexts are modeled by matchModel as well.
  */
 class NormalModel {
 private:
     static constexpr int nCM = 24;
-    static constexpr int nSM = 3;
+    static constexpr int nSM = 1;
     Shared * const shared;
     ContextMap2 cm;
-    StateMap smOrder0Slow;
-    StateMap smOrder1Slow;
-    uint64_t cxt[24+1] {}; // context hashes
+    StateMap smOrder1;
 public:
     static constexpr int MIXERINPUTS =
-            nCM * (ContextMap2::MIXERINPUTS + ContextMap2::MIXERINPUTS_RUN_STATS + ContextMap2::MIXERINPUTS_BYTE_HISTORY) + nSM; //66
-    static constexpr int MIXERCONTEXTS = 64 /* <- pre , pos -> */ + 1024 + 256 + 512 + 256 + 256;
+      2*nSM + 
+      nCM * (ContextMap2::MIXERINPUTS + ContextMap2::MIXERINPUTS_RUN_STATS + ContextMap2::MIXERINPUTS_BYTE_HISTORY); //170
+    static constexpr int MIXERCONTEXTS = 8*16 /* <- pre , pos -> */ + 256 + 2048 + 16 * 16 + 256 + 256; //3272
     static constexpr int MIXERCONTEXTSETS = 7;
     NormalModel(Shared* const sh, uint64_t cmSize);
-    void reset();
 
     /**
      * update order 1..14 context hashes.
