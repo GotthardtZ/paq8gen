@@ -21,5 +21,18 @@ paq8gen_v1 by Zoltán Gotthardt
 - Tuned mixer scaling factor: 940, 80 -> 2048, 256
 
 
+paq8gen_v2 by Zoltán Gotthardt
 2021.01.02
 - Added 10 contexts and 2 mixer context sets to LineModel
+
+
+paq8gen_v3 by Zoltán Gotthardt
+2021.01.31
+- Removed LSTM model, DMCForest, SmallStationaryContextMap, Adaptive Learning Rate
+- Removed unused functions from utils.hpp
+- Imported LargeStationaryMap, MatchModel, IndirectContext changes from (a pre-relase of) paq8px
+- Replaced the 12-bit Arithemtic Encoder with a new high precision one
+- New APM: "APMPost" to support the new Arithmetic Encoder with higher precision probability
+- Cleaned up NormalModel, refined some contexts
+- Cleaned up SSE stage and Shared
+- Tweaks, cosmetic changes

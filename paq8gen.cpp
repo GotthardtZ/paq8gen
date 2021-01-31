@@ -7,7 +7,7 @@
 //////////////////////// Versioning ////////////////////////////////////////
 
 #define PROGNAME     "paq8gen"
-#define PROGVERSION  "3pre"  //update version here before publishing your changes
+#define PROGVERSION  "3"  //update version here before publishing your changes
 #define PROGYEAR     "2020"
 
 
@@ -34,17 +34,11 @@ static void printHelp() {
          "  " PROGNAME " -LEVEL[SWITCHES] INPUTSPEC [OUTPUTSPEC]\n"
          "\n"
          "    -LEVEL:\n"
-         "      -0 = no compression, only transformations when applicable (uses 64 MB)\n"
-         "      -1 -2 -3 = compress using less memory (129, 142, 167 MB)\n"
-         "      -4 -5 -6 -7 -8 -9 = use more memory (217, 316, 516, 915, 1713, 3309 MB)\n"
-         "      -10  -11  -12     = use even more memory (5973, 11350, 21080 MB)\n"
-         "    The listed memory requirements are indicative, actual usage may vary\n"
-         "    depending on several factors including need for temporary files,\n"
-         "    temporary memory needs of some preprocessing (transformations), etc.\n"
+         "      -0 = no compression, only transformations when applicable (uses 29 MB)\n"
+         "      -1 -2 -3 = compress using less memory (85, 94, 113 MB)\n"
+         "      -4 -5 -6 -7 -8 -9 = use more memory (152, 229, 383, 691, 1306, 2537 MB)\n"
+         "      -10  -11  -12     = use even more memory (5000, 9925, 18751 MB)\n"
          "\n"
-         "    optional compression SWITCHES:\n"
-         "      a = Adaptive learning rate\n"
-         "      l = Use Long Short-Term Memory network\n"
          "    INPUTSPEC:\n"
          "    The input may be a FILE or a PATH/FILE.\n"
          "    Only file content and the file size is kept in the archive. Filename,\n"
@@ -60,10 +54,8 @@ static void printHelp() {
          "    the input filename and will be created in the specified folder.\n"
          "    If the archive file already exists it will be overwritten.\n"
          "\n"
-         "    Examples:\n"
-         "      " PROGNAME " -8 enwik8\n"
-         "      " PROGNAME " -8a sequence.fasta\n"
-         "      " PROGNAME " -8al sequence.fasta results/sequence.fasta." PROGNAME PROGVERSION "\n"
+         "    Example:\n"
+         "      " PROGNAME " -8 sequence.fasta\n"
          "\n"
          "To extract (decompress contents):\n"
          "\n"
@@ -80,7 +72,7 @@ static void printHelp() {
          "    the result to the original file. If the file fails the test, the first\n"
          "    mismatched position will be printed to screen.\n"
          "\n"
-         "Additional optional switches:\n"
+         "Optional switches:\n"
          "\n"
          "    -v\n"
          "    Print more detailed (verbose) information to screen.\n"
@@ -388,7 +380,6 @@ auto processCommandLine(int argc, char **argv) -> int {
 
     Mode mode = whattodo == DoCompress ? COMPRESS : DECOMPRESS;
 
-    // Process file list (in multiple file mode)
     { //single file mode or extract/compare/list
       FileName fn(inputPath.c_str());
       fn += input.c_str();
@@ -414,11 +405,6 @@ auto processCommandLine(int argc, char **argv) -> int {
         quit("Unexpected compression level setting in archive");
       }
       shared.init(level);
-      c = archive.getchar();
-      if( c == EOF) {
-        printf("Unexpected end of archive file.\n");
-      }
-      shared.options = static_cast<uint8_t>(c);
     }
 
     if( verbose ) {
@@ -435,7 +421,6 @@ auto processCommandLine(int argc, char **argv) -> int {
       archive.create(archiveName.c_str());
       archive.append(PROGNAME);
       archive.putChar(shared.level);
-      archive.putChar(shared.options);
     }
 
     // In single file mode with no output filename specified we must construct it from the supplied archive filename
