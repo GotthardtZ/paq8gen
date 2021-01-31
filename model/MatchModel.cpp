@@ -176,6 +176,6 @@ void MatchModel::mix(Mixer &m) {
   shared->State.Match.length3 =
     length == 0 ? 0 :
     isInDeltaMode ? 1 :
-    expectedBit+2;
+    length > (LEN2 - LEN1) ? 2 : 3;
   shared->State.Match.expectedByte = length != 0 ? expectedByte : 0;
 }

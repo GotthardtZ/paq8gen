@@ -14,7 +14,7 @@ private:
     Shared * const shared;
     APM APMs[4];
     APM1 APM1s[3];
-    APMPost apm;
+    APMPost apmPost;
 
 public:
     explicit SSE(Shared* const sh);
