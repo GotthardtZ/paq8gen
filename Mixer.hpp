@@ -174,6 +174,10 @@ static void trainSimdNone(const short *const t, short *const w, int n, const int
 
 class Mixer : protected IPredictor {
 protected:
+    static constexpr int MAX_LEARNING_RATE = 7.9 * 65536;
+    static constexpr int MIN_LEARNING_RATE_SN = 5 * 65536;
+    static constexpr int MIN_LEARNING_RATE_S1 = 7 * 65536;
+
     const Shared * const shared;
     const uint32_t n; /**< max inputs */
     const uint32_t m; /**< max contexts */
@@ -182,7 +186,6 @@ protected:
     Array<short, 32> tx; /**< n inputs from add() */
     Array<short, 32> wx; /**< n*m weights */
     Array<uint32_t> cxt; /**< s contexts */
-    Array<ErrorInfo> info; /**< stats for the adaptive learning rates  */
     Array<int> rates; /**< learning rates */
     uint32_t numContexts {}; /**< number of contexts (0 to s)  */
     uint32_t base {}; /**< offset of next context */
@@ -228,7 +231,7 @@ public:
      * @param range
      * @param rate
      */
-    void set(uint32_t cx, uint32_t range, int rate = DEFAULT_LEARNING_RATE);
+    void set(uint32_t cx, uint32_t range);
     void skip(uint32_t range);
     void reset();
 };

@@ -36,7 +36,7 @@ public:
       assert((this->n & (simdWidth() - 1)) == 0);
       assert(this->m > 0);
       assert(this->s > 0);
-      mp = (s > 1) ? new SIMDMixer<simd>(sh, s + (((sh->options & OPTION_LSTM) != 0u) ? 1 : 0), 1, 1) : nullptr;
+      mp = (s > 1) ? new SIMDMixer<simd>(sh, s, 1, 1) : nullptr;
     }
 
     ~SIMDMixer() override {
@@ -66,39 +66,26 @@ public:
         for( uint64_t i = 0; i < numContexts; ++i ) {
           if (cxt[i] != UINT32_MAX) {
             const int err = target - pr[i];
+            int rate = rates[i];
+            if (mp == 0) {
+              if (rate > MIN_LEARNING_RATE_S1) rate--;
+              rates[i] = rate;
+            }
+            else {
+              if (rate > MIN_LEARNING_RATE_SN) rate--;
+              rates[i] = rate;
+            }
             if (simd == SIMD_NONE) {
-              trainSimdNone(&tx[0], &wx[cxt[i] * n], nx, err * rates[i]);
+              trainSimdNone(&tx[0], &wx[cxt[i] * n], nx, (err * rate) >> 16);
             }
             else if (simd == SIMD_SSE2 || simd == SIMD_SSSE3) {
-              trainSimdSse2(&tx[0], &wx[cxt[i] * n], nx, err * rates[i]);
+              trainSimdSse2(&tx[0], &wx[cxt[i] * n], nx, (err * rate) >> 16);
             }
             else if (simd == SIMD_AVX2) {
-              trainSimdAvx2(&tx[0], &wx[cxt[i] * n], nx, err * rates[i]);
+              trainSimdAvx2(&tx[0], &wx[cxt[i] * n], nx, (err * rate) >> 16);
             }
             else if (simd == SIMD_NEON) {
-              trainSimdNeon(&tx[0], &wx[cxt[i] * n], nx, err * rates[i]);
-            }
-            if ((shared->options & OPTION_ADAPTIVE) != 0) {
-              const uint32_t logErr = min(0xF, ilog2(abs(err)));
-              info[i].sum -= square(info[i].data[1] >> 28);
-              info[i].data[1] <<= 4;
-              info[i].data[1] |= info[i].data[0] >> 28;
-              info[i].data[0] <<= 4;
-              info[i].data[0] |= logErr;
-              info[i].sum += square(logErr);
-              info[i].collected += info[i].collected < 4096;
-              info[i].mask <<= 1;
-              info[i].mask |= (logErr <= ((info[i].data[0] >> 4) & 0xF));
-              const uint32_t count = bitCount(info[i].mask);
-              if (info[i].collected >= 64 && (info[i].sum > 1500 + uint32_t(rates[i]) * 64 || count < 9 || (info[i].mask & 0xFF) == 0)) {
-                rates[i] = DEFAULT_LEARNING_RATE;
-                memset(&info[i], 0, sizeof(ErrorInfo));
-              }
-              else if (info[i].collected == 4096 && info[i].sum >= 56 && info[i].sum <= 144 && count > 28 - uint32_t(rates[i]) &&
-                ((info[i].mask & 0xFF) == 0xFF)) {
-                rates[i] -= rates[i] > 2;
-                info[i].reset();
-              }
+              trainSimdNeon(&tx[0], &wx[cxt[i] * n], nx, (err * rate) >> 16);
             }
           }
         }

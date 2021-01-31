@@ -28,13 +28,8 @@ auto Models::normalModel() -> NormalModel & {
   return instance;
 }
 
-auto Models::dmcForest() -> DmcForest & {
-  static DmcForest instance {shared, shared->mem};  /**< Not the actual memory use - see in the model */
-  return instance;
-}
-
 auto Models::matchModel() -> MatchModel & {
-  static MatchModel instance {shared, shared->mem * 4 /*buffermemorysize*/, shared->mem / 32 /*mapmemorysize*/ };
+  static MatchModel instance {shared, shared->mem / 4 /*hashtablesize*/, shared->mem /*mapmemorysize*/ };
   return instance;
 }
 
@@ -43,8 +38,4 @@ auto Models::lineModel() -> LineModel & {
   return instance;
 }
 
-auto Models::lstmModel() -> LstmModel<> & {
-  static LstmModel<>* instance = LstmFactory<>::CreateLSTM(shared, 200, 2, 100, 0.06f, 16.f);
-  return *instance;
-}
 

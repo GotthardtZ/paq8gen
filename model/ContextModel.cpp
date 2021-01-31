@@ -7,16 +7,13 @@ ContextModel::ContextModel(Shared* const sh, Models &models) : shared(sh), model
     sh,
     1 +  //bias
     MatchModel::MIXERINPUTS + NormalModel::MIXERINPUTS +
-    LineModel::MIXERINPUTS +
-    DmcForest::MIXERINPUTS + LstmModel<>::MIXERINPUTS
+    LineModel::MIXERINPUTS
     ,
     MatchModel::MIXERCONTEXTS + NormalModel::MIXERCONTEXTS +
-    LineModel::MIXERCONTEXTS +
-    DmcForest::MIXERCONTEXTS + LstmModel<>::MIXERCONTEXTS
+    LineModel::MIXERCONTEXTS
     ,
     MatchModel::MIXERCONTEXTSETS + NormalModel::MIXERCONTEXTSETS +
-    LineModel::MIXERCONTEXTSETS +
-    DmcForest::MIXERCONTEXTSETS + LstmModel<>::MIXERCONTEXTSETS
+    LineModel::MIXERCONTEXTSETS
   );
 }
 
@@ -67,24 +64,16 @@ auto ContextModel::p() -> int {
 
   m->add(256); //network bias
 
-  MatchModel &matchModel = models.matchModel();
-  matchModel.mix(*m);
-  
   NormalModel &normalModel = models.normalModel();
   normalModel.mix(*m);
 
-  normalModel.mixPost(*m);
+  MatchModel& matchModel = models.matchModel();
+  matchModel.mix(*m);
 
-  if ((shared->options & OPTION_LSTM) != 0u) {
-    LstmModel<>& lstmModel = models.lstmModel();
-    lstmModel.mix(*m);
-  }
+  normalModel.mixPost(*m);
 
   LineModel &lineModel = models.lineModel();
   lineModel.mix(*m);
-
-  DmcForest &dmcForest = models.dmcForest();
-  dmcForest.mix(*m);
 
   m->setScaleFactor(2048, 256);
   return m->p();

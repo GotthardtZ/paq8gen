@@ -80,23 +80,11 @@ static_assert(sizeof(int) == 4, "sizeof(int)");
 //uRetVal, DWORD, UINT, TRUE, MAX_PATH, CP_UTF8, etc.
 #endif
 
-#define DEFAULT_LEARNING_RATE 7
-
 typedef enum {
   SIMD_NONE, SIMD_SSE2, SIMD_SSSE3, SIMD_AVX2, SIMD_NEON
 } SIMD;
 
-struct ErrorInfo {
-  uint32_t data[2], sum, mask, collected;
 
-  void reset() {
-    memset(this, 0, sizeof(*this));
-  }
-};
-
-static inline auto square(uint32_t x) -> uint32_t {
-  return x * x;
-}
 
 static inline auto min(int a, int b) -> int { return std::min<int>(a, b); }
 
@@ -109,14 +97,6 @@ constexpr auto isPowerOf2(T x) -> bool {
   return ((x & (x - 1)) == 0);
 }
 
-template <std::uint8_t e>
-struct neg_pow10 {
-  static constexpr float value = neg_pow10<e - 1>::value / 10.0f;
-};
-template <>
-struct neg_pow10<0> {
-  static constexpr float value = 1.0f;
-};
 
 #ifndef NDEBUG
 #if defined(UNIX)
@@ -173,8 +153,6 @@ static inline auto hasInfo(BlockType ft) -> bool {
 static inline auto hasTransform(BlockType ft) -> bool {
   return ft == TEXT_EOL;
 }
-#define OPTION_ADAPTIVE 16U
-#define OPTION_LSTM 64U
 
 //////////////////// Cross-platform definitions /////////////////////////////////////
 

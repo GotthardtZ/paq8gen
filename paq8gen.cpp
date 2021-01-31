@@ -7,7 +7,7 @@
 //////////////////////// Versioning ////////////////////////////////////////
 
 #define PROGNAME     "paq8gen"
-#define PROGVERSION  "2fixa"  //update version here before publishing your changes
+#define PROGVERSION  "3pre"  //update version here before publishing your changes
 #define PROGYEAR     "2020"
 
 
@@ -143,8 +143,6 @@ static void printCommand(const WHATTODO &whattodo) {
 
 static void printOptions(Shared *shared) {
   printf(" Level          = %d\n", shared->level);
-  printf(" Adaptive   (a) = %s\n", (shared->options & OPTION_ADAPTIVE) != 0U ? "On  (Adaptive learning rate)" : "Off");
-  printf(" Use LSTM   (l) = %s\n", (shared->options & OPTION_LSTM) != 0U ? "On  (Use Long Short-Term Memory network)" : "Off");
 }
 
 auto processCommandLine(int argc, char **argv) -> int {
@@ -200,12 +198,6 @@ auto processCommandLine(int argc, char **argv) -> int {
           //process optional compression switches
           for( ; j < argLen; j++ ) {
             switch( argv[i][j] & 0xDFU ) {
-              case 'A':
-                shared.options |= OPTION_ADAPTIVE;
-                break;
-              case 'L':
-                shared.options |= OPTION_LSTM;
-                break;
               default: {
                 printf("Invalid compression switch: %c", argv[1][j]);
                 quit();

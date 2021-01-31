@@ -22,9 +22,6 @@
     <Filter Include="model">
       <UniqueIdentifier>{b7cb947a-b9cc-43a3-91e9-f0b49f39101f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\lstm">
-      <UniqueIdentifier>{73abd1bc-6333-4b69-a064-57ad2414ab30}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdaptiveMap.cpp">
@@ -69,9 +66,6 @@
     <ClCompile Include="Shared.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SmallStationaryContextMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SSE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,22 +93,10 @@
     <ClCompile Include="file\FileName.cpp">
       <Filter>file</Filter>
     </ClCompile>
-    <ClCompile Include="file\FileTmp.cpp">
-      <Filter>file</Filter>
-    </ClCompile>
     <ClCompile Include="filter\TextParserStateInfo.cpp">
       <Filter>filter</Filter>
     </ClCompile>
     <ClCompile Include="model\ContextModel.cpp">
-      <Filter>model</Filter>
-    </ClCompile>
-    <ClCompile Include="model\DmcForest.cpp">
-      <Filter>model</Filter>
-    </ClCompile>
-    <ClCompile Include="model\DmcModel.cpp">
-      <Filter>model</Filter>
-    </ClCompile>
-    <ClCompile Include="model\DmcNode.cpp">
       <Filter>model</Filter>
     </ClCompile>
     <ClCompile Include="model\MatchModel.cpp">
@@ -122,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="model\NormalModel.cpp">
       <Filter>model</Filter>
-    </ClCompile>
-    <ClCompile Include="Clz.hpp">
-      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="ArithmeticEncoder.cpp">
       <Filter>Source Files</Filter>
@@ -137,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="model\LineModel.cpp">
       <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="file\FileTmp.cpp">
+      <Filter>file</Filter>
+    </ClCompile>
+    <ClCompile Include="APMPost.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +194,6 @@
     <ClInclude Include="SimdMixer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SmallStationaryContextMap.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Squash.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -248,9 +230,6 @@
     <ClInclude Include="file\FileName.hpp">
       <Filter>file</Filter>
     </ClInclude>
-    <ClInclude Include="file\FileTmp.hpp">
-      <Filter>file</Filter>
-    </ClInclude>
     <ClInclude Include="file\fileUtils.hpp">
       <Filter>file</Filter>
     </ClInclude>
@@ -272,15 +251,6 @@
     <ClInclude Include="model\ContextModel.hpp">
       <Filter>model</Filter>
     </ClInclude>
-    <ClInclude Include="model\DmcForest.hpp">
-      <Filter>model</Filter>
-    </ClInclude>
-    <ClInclude Include="model\DmcModel.hpp">
-      <Filter>model</Filter>
-    </ClInclude>
-    <ClInclude Include="model\DmcNode.hpp">
-      <Filter>model</Filter>
-    </ClInclude>
     <ClInclude Include="model\MatchModel.hpp">
       <Filter>model</Filter>
     </ClInclude>
@@ -295,45 +265,6 @@
     </ClInclude>
     <ClInclude Include="VLI.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\Activations.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\Adam.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\CosineDecay.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\IDecay.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\IOptimizer.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\Layer.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\Lstm.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\LstmFactory.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\LstmLayer.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\LstmModel.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\PolynomialDecay.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\SimdFunctions.hpp">
-      <Filter>Header Files\lstm</Filter>
-    </ClInclude>
-    <ClInclude Include="lstm\SimdLstmModel.hpp">
-      <Filter>Header Files\lstm</Filter>
     </ClInclude>
     <ClInclude Include="LargeStationaryMap.hpp">
       <Filter>Header Files</Filter>
@@ -352,6 +283,15 @@
     </ClInclude>
     <ClInclude Include="model\LineModel.hpp">
       <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="HashElementForMatchPositions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="file\FileTmp.hpp">
+      <Filter>file</Filter>
+    </ClInclude>
+    <ClInclude Include="APMPost.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
