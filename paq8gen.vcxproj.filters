@@ -42,9 +42,6 @@
     <ClCompile Include="Ilog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IndirectMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mixer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -156,9 +153,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IndirectContext.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IndirectMap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IPredictor.hpp">

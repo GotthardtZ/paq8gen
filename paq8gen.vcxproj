@@ -262,7 +262,6 @@
     <ClCompile Include="file\FileTmp.cpp" />
     <ClCompile Include="filter\TextParserStateInfo.cpp" />
     <ClCompile Include="Ilog.cpp" />
-    <ClCompile Include="IndirectMap.cpp" />
     <ClCompile Include="LargeStationaryMap.cpp" />
     <ClCompile Include="Mixer.cpp" />
     <ClCompile Include="MixerFactory.cpp" />
@@ -312,7 +311,6 @@
     <ClInclude Include="HashTable.hpp" />
     <ClInclude Include="Ilog.hpp" />
     <ClInclude Include="IndirectContext.hpp" />
-    <ClInclude Include="IndirectMap.hpp" />
     <ClInclude Include="IPredictor.hpp" />
     <ClInclude Include="LargeIndirectContext.hpp" />
     <ClInclude Include="LargeStationaryMap.hpp" />
