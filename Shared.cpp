@@ -24,7 +24,7 @@ void Shared::init(uint8_t level) {
   this->level = level;
   mem = UINT64_C(65536) << level;
   buf.setSize(static_cast<uint32_t>(min(mem * 8, UINT64_C(1) << 30))); /**< no reason to go over 1 GB */
-  toScreen = !isOutputDirected();
+  toScreen = !isOutputRedirected();
 }
 
 void Shared::update(int y) {
@@ -38,8 +38,6 @@ void Shared::update(int y) {
     State.c4 = (State.c4 << 8U) | State.c0;
     State.c0 = 1;
   }
-  static constexpr uint8_t asciiGroup[254] = { 0, 10, 0, 1, 10, 10, 0, 4, 2, 3, 10, 10, 10, 10, 0, 0, 5, 4, 2, 2, 3, 3, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 5, 5, 9, 4, 2, 2, 2, 2, 3, 3, 3, 3, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 5, 8, 8, 5, 9, 9, 6, 5, 2, 2, 2, 2, 2, 2, 2, 8, 3, 3, 3, 3, 3, 3, 3, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 8, 8, 8, 5, 5, 9, 9, 9, 9, 9, 7, 8, 5, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 8, 8, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 8, 8, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
-  State.Text.characterGroup = (State.bitPosition > 0) ? asciiGroup[(1U << State.bitPosition) - 2 + (State.c0 & ((1U << State.bitPosition) - 1))] : 0;
   
   // Broadcast to all current subscribers: y (and c0, c1, c4, etc) is known
   updateBroadcaster.broadcastUpdate();
@@ -56,7 +54,7 @@ UpdateBroadcaster *Shared::GetUpdateBroadcaster() const {
   return updater;
 }
 
-auto Shared::isOutputDirected() -> bool {
+auto Shared::isOutputRedirected() -> bool {
 #ifdef WINDOWS
   DWORD FileType = GetFileType(GetStdHandle(STD_OUTPUT_HANDLE));
   return (FileType == FILE_TYPE_PIPE) || (FileType == FILE_TYPE_DISK);

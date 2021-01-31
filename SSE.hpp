@@ -3,6 +3,7 @@
 
 #include "APM.hpp"
 #include "APM1.hpp"
+#include "APMPost.hpp"
 #include "Hash.hpp"
 
 /**
@@ -11,13 +12,9 @@
 class SSE {
 private:
     Shared * const shared;
-    struct {
-        APM APMs[4];
-        APM1 APM1s[3];
-    } Text;
-    struct {
-        APM1 APM1s[7];
-    } Generic;
+    APM APMs[4];
+    APM1 APM1s[3];
+    APMPost apm;
 
 public:
     explicit SSE(Shared* const sh);
