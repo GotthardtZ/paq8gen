@@ -64,6 +64,7 @@ void ContextMap2::set(uint8_t ctxflags, const uint64_t contexthash) {
 void ContextMap2::skip(const uint8_t ctxflags) {
   assert(index >= 0 && index < C);
   contextInfoList[index].flags = ctxflags | CM_SKIPPED_CONTEXT;
+  contextflagsAll |= ctxflags;
   index++;
 }
 
