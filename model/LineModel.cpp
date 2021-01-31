@@ -40,7 +40,7 @@ void LineModel::mix(Mixer &m) {
       nl1 = pos;
       line0 = 0;
       groups = 0;
-      firstChar = 256;
+      firstChar = 0;
     }
     else {
       line0 = combine64(line0, c1);
@@ -50,6 +50,8 @@ void LineModel::mix(Mixer &m) {
     if (col == 1) {
       firstChar = c1;
       if ('A' <= firstChar && firstChar <= 'Z')
+        firstChar = 'A';
+      else if ('a' <= firstChar && firstChar <= 'z')
         firstChar = 'A';
     }
     INJECT_SHARED_buf
@@ -116,7 +118,10 @@ void LineModel::mix(Mixer &m) {
   }
   cm.mix(m);
   
+  int firstCharCtx = firstChar == 'A' ? 2 : firstChar == '>' ? 1 : 0;
+  m.set(firstCharCtx, 3);
   m.set(groups & 0xff, 256);
-  m.set(firstChar == 'A' ? 2 : firstChar == '>' ? 1 : 0, 3);
+
+  shared->State.LineModel.firstLetter = firstCharCtx;
 }
 
