@@ -24,10 +24,13 @@ private:
     Array<Bucket16<HashElementForStationaryMap, 7>> data;
     const uint32_t hashBits;
     int scale, rate;
-    uint64_t context;
-    uint32_t *cp;
+
+    const uint32_t numContexts; /**< Maximum supported contexts */
+    uint32_t currentContextIndex; /**< Number of context indexes present in cxt array (0..numContexts-1) */
+    Array<uint64_t> contextHashes; /**< context index of last prediction per context */
 
 public:
+  int order = 0;
     /**
      * Construct using 2^hashBits * sizeof(Bucket16) bytes of memory for storing a maximum of 2^hashBits * ElementsInBucket
      * That is:
@@ -48,17 +51,21 @@ public:
      * @param scale
      * @param rate use 16 near-stationary modelling (default), smaller values may be used for tuning adaptivity
      */
-    LargeStationaryMap(const Shared* const sh, const int hashBits, const int scale = 64, const int rate = 16);
+    LargeStationaryMap(const Shared* const sh, const int contexts, const int hashBits, const int scale = 64, const int rate = 16);
 
     /**
      * ctx must be a hash
      * @param ctx
      */
-    void set(uint64_t ctx);
-    void setscale(int scale);
+    void set(const uint64_t contextHash);
+    void setscale(const int scale);
     void reset();
     void update() override;
+    void update(uint32_t *cp);
     void mix(Mixer &m);
+    void subscribe();
+    void skip();
+
 };
 
 #endif //PAQ8GEN_LARGESTATIONARYMAP_HPP
