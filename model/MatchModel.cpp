@@ -102,13 +102,13 @@ void MatchModel::mix(Mixer &m) {
     if (length <= 16) {
       denselength = length - 1; // 0..15
     } else {
-      denselength = 12 + (min(length - 1, 63) >> 2); // 16..27
+      denselength = 12 + (min(length - 1u, 63u) >> 2); // 16..27
     }
     ctx[0] = (denselength << 9) | (expectedBit << 8) | c0; // 1..28*512
     ctx[1] = ((expectedByte << 11) | (bpos << 8) | c1) + 1;
     const int sign = 2 * expectedBit - 1;
-    m.add(sign * (min(length, 32) << 5)); // +/- 32..1024
-    m.add(sign * (ilog->log(min(length, 65535)) << 2)); // +/-  0..1024
+    m.add(sign * (min(length, 32u) << 5)); // +/- 32..1024
+    m.add(sign * (ilog->log(min(length, 65535u)) << 2)); // +/-  0..1024
   } else { // no match at all or delta mode
     m.add(0);
     m.add(0);
@@ -168,11 +168,10 @@ void MatchModel::mix(Mixer &m) {
 
   INJECT_SHARED_y
   iCtx += y;
-  iCtx = (bpos << 12) | (c1 << 4) | min(mCtx,15); // 15 bits
+  iCtx = (bpos << 12) | (c1 << 4) | min(mCtx, 15u); // 15 bits
   map[0].set(iCtx() << 3 | mode3); // (max 7 bits + 1 leading bit) + 3 bits
   map[0].mix(m);
-
-  m.set(min(mCtx, 11),12);
+  m.set(min(mCtx, 11u),12);
   shared->State.Match.length3 =
     length == 0 ? 0 :
     isInDeltaMode ? 1 :

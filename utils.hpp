@@ -88,6 +88,8 @@ typedef enum {
 
 static inline auto min(int a, int b) -> int { return std::min<int>(a, b); }
 
+static inline auto min(uint32_t a, uint32_t b) -> uint32_t { return std::min<uint32_t>(a, b); }
+
 static inline auto min(uint64_t a, uint64_t b) -> uint64_t { return std::min<uint64_t>(a, b); }
 
 static inline auto max(int a, int b) -> int { return std::max<int>(a, b); }

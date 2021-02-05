@@ -29,7 +29,7 @@ StateMap::StateMap(const Shared* const sh, const int s, const int n, const int l
             n1 = 29 + (1 << incremental_state);
           n0 = n0 * 3 + 1;
           n1 = n1 * 3 + 1;
-          p = ((n1 << 18) / (n0 + n1)) << 14 | min((n0 + n1) >> 3, 1023);
+          p = ((n1 << 18) / (n0 + n1)) << 14 | min((n0 + n1) >> 3, 1023u);
           //printf("%d %d\n", state, p >> 20); // verifying
         }
         else { // 253, 254, 255
