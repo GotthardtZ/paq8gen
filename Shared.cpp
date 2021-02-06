@@ -4,7 +4,7 @@
  relationship between compression level, shared->mem and buf memory use 
 
  level   shared->mem    buf memory use (shared->mem * 8)
- -----   -----------    --------------
+ -----   -----------    --------------------------------
    1      0.125 MB              1 MB
    2      0.25	MB              2 MB
    3      0.5   MB              4 MB
@@ -16,15 +16,15 @@
    9     32.0   MB            256 MB
   10     64.0   MB            512 MB
   11    128.0   MB           1024 MB
-  12    256.0   MB           1024 MB
+  12    256.0   MB           2048 MB
 
 */
 
 void Shared::init(uint8_t level) {
   this->level = level;
-  mem = UINT64_C(65536) << level;
-  buf.setSize(static_cast<uint32_t>(min(mem * 8, UINT64_C(1) << 30))); /**< no reason to go over 1 GB */
-  toScreen = !isOutputRedirected();
+  this->mem = UINT64_C(65536) << level;
+  this->buf.setSize(mem * 8);
+  this->toScreen = !isOutputRedirected();
 }
 
 void Shared::update(int y) {

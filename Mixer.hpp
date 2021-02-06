@@ -174,7 +174,7 @@ static void trainSimdNone(const short *const t, short *const w, int n, const int
 
 class Mixer : protected IPredictor {
 protected:
-  static constexpr int MAX_LEARNING_RATE = 8 * 65536 - 1;
+    static constexpr int MAX_LEARNING_RATE = 8 * 65536 - 1;
     static constexpr int MIN_LEARNING_RATE_SN = 8 * 65536 - 1;
     static constexpr int MIN_LEARNING_RATE_S1 = 8 * 65536 - 1;
 

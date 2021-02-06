@@ -64,16 +64,14 @@ auto ContextModel::p() -> int {
 
   m->add(256); //network bias
 
-  NormalModel &normalModel = models.normalModel();
+  NormalModel& normalModel = models.normalModel();
   normalModel.mix(*m);
+
+  LineModel& lineModel = models.lineModel();
+  lineModel.mix(*m);
 
   MatchModel& matchModel = models.matchModel();
   matchModel.mix(*m);
-
-  normalModel.mixPost(*m);
-
-  LineModel &lineModel = models.lineModel();
-  lineModel.mix(*m);
 
   m->setScaleFactor(2048, 256);
   return m->p();
