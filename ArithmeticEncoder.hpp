@@ -15,11 +15,11 @@ public:
   File *archive; /**< Compressed data file */
   void prefetch();
   void flush();
-  void encodeBit(int p, int bit);
-  int decodeBit(int p);
+  void encodeBit(uint32_t p, const int bit);
+  int decodeBit(uint32_t p);
 private:
   int bit_read();
-  void bit_write(int bit);
+  void bit_write(const int bit);
   void bit_write_with_pending(const int bit);
 };
 

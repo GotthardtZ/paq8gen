@@ -16,7 +16,7 @@ ArithmeticEncoder::ArithmeticEncoder(File* f) : x1(0), x2(0xffffffff), x(0), pen
   }
 
   // write the archive bit by bit
-  void ArithmeticEncoder::bit_write(int bit) {
+  void ArithmeticEncoder::bit_write(const int bit) {
     B = (B << 1) | bit;
     bits_in_B++;
     if (bits_in_B == 8) {
@@ -41,10 +41,10 @@ ArithmeticEncoder::ArithmeticEncoder(File* f) : x1(0), x2(0xffffffff), x(0), pen
 
 void ArithmeticEncoder::prefetch() {
   for (int i = 0; i < 32; ++i)
-    x = (x << 1) + bit_read();
+    x = (x << 1) | bit_read();
 }
 
-void ArithmeticEncoder::encodeBit(int p, int bit) {
+void ArithmeticEncoder::encodeBit(uint32_t p, const int bit) {
   if (p == 0) p++;
   assert(p > 0 && p < (1 << PRECISION));
   uint32_t xmid = x1 + uint32_t((uint64_t(x2 - x1) * p) >> PRECISION);
@@ -53,7 +53,7 @@ void ArithmeticEncoder::encodeBit(int p, int bit) {
   while (((x1 ^ x2) >> 31) == 0) {  // pass equal leading bits of range
     bit_write_with_pending(x2 >> 31);
     x1 <<= 1;
-    x2 = (x2 << 1) + 1;
+    x2 = (x2 << 1) | 1;
   }
   while (x1 >= 0x40000000 && x2 < 0xC0000000) {
     pending_bits++;
@@ -62,7 +62,7 @@ void ArithmeticEncoder::encodeBit(int p, int bit) {
   }
 }
 
-int ArithmeticEncoder::decodeBit(int p) {
+int ArithmeticEncoder::decodeBit(uint32_t p) {
   if (p == 0) p++;
   assert(p > 0 && p < (1<< PRECISION));
   uint32_t xmid = x1 + uint32_t((uint64_t(x2 - x1) * p) >> PRECISION);
@@ -71,8 +71,8 @@ int ArithmeticEncoder::decodeBit(int p) {
   bit != 0 ? (x2 = xmid) : (x1 = xmid + 1);
   while (((x1 ^ x2) >> 31) == 0) {  // pass equal leading bits of range
     x1 <<= 1;
-    x2 = (x2 << 1) + 1;
-    x = (x << 1) + bit_read();
+    x2 = (x2 << 1) | 1;
+    x = (x << 1) | bit_read();
   }
   while (x1 >= 0x40000000 && x2 < 0xC0000000) {
     x1 = (x1 << 1) & 0x7FFFFFFF;
