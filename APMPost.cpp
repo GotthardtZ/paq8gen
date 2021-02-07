@@ -1,14 +1,14 @@
 #include "APMPost.hpp"
 #include "ArithmeticEncoder.hpp"
 
-APMPost::APMPost(const Shared* const sh, const uint32_t n) : shared(sh), index(0), n(n), t(n*4096) {
+APMPost::APMPost(const Shared* const sh, const uint32_t n) : shared(sh), index(0), n(n), t(n* UINT64_C(4096)) {
   assert(n > 0);
   for(size_t i = 0; i < n; ++i ) {
     for(uint64_t j = 0; j < 4096; ++j ) {
-        t[i * 4096 + j] = (4096 - j) << 32 | j;
-      }
+      t[i * 4096 + j] = ((4096 - j) >> 2) << 32 | (j >> 2);
     }
   }
+}
 
 
 auto APMPost::p(const uint32_t pr, const uint32_t cxt) -> uint32_t {
