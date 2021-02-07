@@ -14,11 +14,11 @@ private:
     Shared * const shared;
     APM APMs[4];
     APM1 APM1s[3];
-    APMPost apmPost;
+    APMPost APMPostA, APMPostB;
 
 public:
     explicit SSE(Shared* const sh);
-    auto p(int pr0) -> int;
+    uint32_t p(uint32_t pr0);
 };
 
 #endif //PAQ8GEN_SSE_HPP
