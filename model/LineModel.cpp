@@ -11,8 +11,6 @@ void LineModel::mix(Mixer &m) {
   if (bpos == 0) {
     INJECT_SHARED_pos
     INJECT_SHARED_c1
-    INJECT_SHARED_c4
-    INJECT_SHARED_c8
 
     uint8_t g = c1;
     if (g >= 128) {
@@ -27,11 +25,7 @@ void LineModel::mix(Mixer &m) {
     else if (g >= '0' && g <= '9') g = '0';
     else if (g >= 'a' && g <= 'z') g = 'a';
     else if (g >= 'A' && g <= 'Z') g = 'A';
-    else if (g == ' ') g = 6;
-    else if (g == '.') g = 7;
-    else if (g == '>') g = 8;
-    else g = 0;
-    groups = groups << 8U | g;
+    groups = groups << 8 | g;
 
     const uint8_t RH = CM_USE_RUN_STATS | CM_USE_BYTE_HISTORY;
     const auto isNewline = c1 == NEW_LINE || c1 == 0;
@@ -48,11 +42,13 @@ void LineModel::mix(Mixer &m) {
 
     uint64_t col = pos - nl1;
     if (col == 1) {
-      firstChar = c1;
-      if ('A' <= firstChar && firstChar <= 'Z')
-        firstChar = 'A';
-      else if ('a' <= firstChar && firstChar <= 'z')
-        firstChar = 'A';
+      if ('A' <= c1 && c1 <= 'Z')
+        firstChar = 1;
+      else if ('a' <= c1 && c1 <= 'z')
+        firstChar = 1;
+      else 
+        firstChar = 2;
+
     }
     INJECT_SHARED_buf
     const uint8_t cAbove = buf[nl2 + col];
@@ -77,16 +73,16 @@ void LineModel::mix(Mixer &m) {
     cm.set(RH, hash(++i, line0));
 
     // context: matches with the previous line
-    if (firstChar != 'A' && lineMatch >= 0) {
+    if (firstChar != 1 && lineMatch >= 0) { // not [a-zA-Z]
       cm.set(RH, hash(++i, cAbove, lineMatch));
     }
     else {
       cm.skip(RH); i++;
     }
 
-    if (firstChar != 'A') {
+    if (firstChar != 1) { // not [a-zA-Z]
       cm.set(RH, hash(++i, aboveCtx, c1));
-      cm.set(RH, hash(++i, col << 9U | aboveCtx, c1));
+      cm.set(RH, hash(++i, col << 9 | aboveCtx, c1));
       const int lineLength = nl1 - nl2;
       cm.set(RH, hash(++i, nl1 - nl2, col, aboveCtx));
       cm.set(RH, hash(++i, nl1 - nl2, col, aboveCtx, c1));
@@ -102,8 +98,10 @@ void LineModel::mix(Mixer &m) {
     cm.set(RH, hash(++i, col));
     cm.set(RH, hash(++i, col, c1));
 
-    if (firstChar == 'A') {
+    if (firstChar == 1) { // [a-zA-Z]
+      INJECT_SHARED_c4
       cm.set(RH, hash(++i, col, c4));
+      INJECT_SHARED_c8
       cm.set(RH, hash(++i, col, c4, c8));
     }
     else {
@@ -112,16 +110,16 @@ void LineModel::mix(Mixer &m) {
     }
 
     cm.set(RH, hash(++i, nl1)); // chars occurring in this paragraph (order 0)
-    cm.set(RH, hash(++i, 0)); // order 0 context (seconding to the normalmodel one)
+    cm.set(RH, hash(++i, firstChar)); // order 0 context in paragraphs like this
 
     assert(i == nCM);
   }
   cm.mix(m);
+  uint32_t order = min(cm.order, 15);
   
-  int firstCharCtx = firstChar == 'A' ? 2 : firstChar == '>' ? 1 : 0;
-  m.set(firstCharCtx, 3);
+  m.set(firstChar + ((shared->State.order << 3) | (order >> 1)) * 3, 3 * 16 * 8);
   m.set(groups & 0xff, 256);
 
-  shared->State.LineModel.firstLetter = firstCharCtx;
+  shared->State.LineModel.firstLetter = firstChar;
 }
 

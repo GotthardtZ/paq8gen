@@ -131,32 +131,26 @@ void MatchModel::mix(Mixer &m) {
     }
   }
 
-  const uint32_t lengthIlog2 = ilog2(length + 1);
-  //length=0:      lengthIlog2=0
-  //length=1..2:   lengthIlog2=1
-  //length=3..6:   lengthIlog2=2
-  //length=7..14:  lengthIlog2=3
-  //length=15..30: lengthIlog2=4
+  const uint32_t length2 = min(length >> 3, 3u); //0-3 (2 bits)
 
   const uint8_t mode = 
     isInNoMatchMode ? 0 :
     isInDeltaMode ? 1 :
     isInPreRecoveryMode ? 2 :
     isInRecoveryMode ? 3 :
-    3 + lengthIlog2;
-  uint8_t mode3 = min(mode, 7); // 3 bits
+    3 + length2; //0-7 (3 bits)
   
   //bytewise contexts
   INJECT_SHARED_c4
   if( bpos == 0 ) {
     const uint8_t R_ = CM_USE_RUN_STATS;
-    cm.set(R_, hash((length != 0 ? expectedByte : c1)<<3 | mode3)); //max context bits: 8+8+3 = 19
-    cm.set(R_, hash(length != 0 ? expectedByte : ((c4 >> 8) & 0xff), (c1<<3)| mode3)); //max context bits: 8+8+8+3=27
+    cm.set(R_, hash((length != 0 ? expectedByte : c1)<<3 | mode)); //max context bits: 8+8+3 = 19
+    cm.set(R_, hash(length != 0 ? expectedByte : ((c4 >> 8) & 0xff), (c1<<3)| mode)); //max context bits: 8+8+8+3=27
   }
   cm.mix(m);
 
   //bitwise contexts
-  mapL[0].set(hash(expectedByte, c0, c4 & 0x00ffffff, mode3)); // max context bits: 8+8+24+3 = 43 bits -> hashed into ~22 bits
+  mapL[0].set(hash(expectedByte, c0, c4 & 0x00ffffff, mode)); // max context bits: 8+8+24+3 = 43 bits -> hashed into ~22 bits
   mapL[0].mix(m);
 
   const uint32_t mCtx =
@@ -164,17 +158,23 @@ void MatchModel::mix(Mixer &m) {
     isInDeltaMode ? 1 :
     isInPreRecoveryMode ? 2 :
     isInRecoveryMode ? 3 :
-    4 + ((lengthIlog2 - 1) << 1 | expectedBit);
+    4 + (length2 << 1 | expectedBit); //0..11
 
   INJECT_SHARED_y
   iCtx += y;
   iCtx = (bpos << 12) | (c1 << 4) | min(mCtx, 15u); // 15 bits
-  map[0].set(iCtx() << 3 | mode3); // (max 7 bits + 1 leading bit) + 3 bits
+  map[0].set(iCtx() << 3 | mode); // (max 7 bits + 1 leading bit) + 3 bits
   map[0].mix(m);
-  m.set(min(mCtx, 11u),12);
-  shared->State.Match.length3 =
+
+  uint32_t lengthCtx =
     length == 0 ? 0 :
-    isInDeltaMode ? 1 :
-    length > (LEN2 - LEN1) ? 2 : 3;
+    length > (LEN2 - LEN1) ? 1 : 2; //0..2
+
+  m.set(mCtx, 12);
+  m.set(lengthCtx << 3 | bpos, 3 * 8);
+
+  shared->State.Match.lengthCtx = lengthCtx; //0..2
+  shared->State.Match.expectedBit = length == 0 ? 0 : 1 + expectedBit; //0..2
   shared->State.Match.expectedByte = length != 0 ? expectedByte : 0;
+
 }

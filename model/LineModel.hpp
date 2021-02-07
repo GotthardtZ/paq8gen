@@ -13,7 +13,7 @@ private:
   static constexpr int nCM = 14;
 public:
     static constexpr int MIXERINPUTS = nCM * (ContextMap2::MIXERINPUTS + ContextMap2::MIXERINPUTS_RUN_STATS + ContextMap2::MIXERINPUTS_BYTE_HISTORY); // 28
-    static constexpr int MIXERCONTEXTS = 256 + 3;
+    static constexpr int MIXERCONTEXTS = 256 + (3 * 16 * 8);
     static constexpr int MIXERCONTEXTSETS = 2;
 
     static constexpr int maxLineMatch = 16;

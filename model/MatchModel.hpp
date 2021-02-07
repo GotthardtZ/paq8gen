@@ -125,7 +125,7 @@ private:
             if (length < 65535) {
               length++;
             }
-            if (isInRecoveryMode() && recoveryModePos() >= (shared->State.LineModel.firstLetter == 2 ? MINLEN_RM_LE : MINLEN_RM)) { // recovery seems to be successful and stable -> exit recovery mode
+            if (isInRecoveryMode() && recoveryModePos() >= (shared->State.LineModel.firstLetter == 1 ? MINLEN_RM_LE : MINLEN_RM)) { // recovery seems to be successful and stable -> exit recovery mode
               lengthBak = indexBak = 0; // purge backup
             }
           }
@@ -194,8 +194,8 @@ public:
       nST * 2 +
       nLSM * LargeStationaryMap::MIXERINPUTS +
       nSM * StationaryMap::MIXERINPUTS; // 24
-    static constexpr int MIXERCONTEXTS = 20;
-    static constexpr int MIXERCONTEXTSETS = 1;
+    static constexpr int MIXERCONTEXTS = 12 + (3 * 8);
+    static constexpr int MIXERCONTEXTSETS = 2;
     MatchModel(Shared* const sh, const uint64_t hashtablesize, const uint64_t mapmemorysize);
     void update();
     void mix(Mixer &m);
