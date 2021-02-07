@@ -73,7 +73,7 @@ auto ContextModel::p() -> int {
   MatchModel& matchModel = models.matchModel();
   matchModel.mix(*m);
 
-  m->setScaleFactor(2048, 256);
+  m->setScaleFactor(1400, 90);
   return m->p();
 }
 
