@@ -18,9 +18,9 @@ private:
 public:
     static constexpr int MIXERINPUTS =
       2*nSM + 
-      nCM * (ContextMap2::MIXERINPUTS + ContextMap2::MIXERINPUTS_RUN_STATS + ContextMap2::MIXERINPUTS_BYTE_HISTORY); //170
-    static constexpr int MIXERCONTEXTS = 8*16 /* <- pre , pos -> */ + 256 + 2048 + 16 * 16 + 256 + 256; //3272
-    static constexpr int MIXERCONTEXTSETS = 7;
+      nCM * (ContextMap2::MIXERINPUTS + ContextMap2::MIXERINPUTS_RUN_STATS + ContextMap2::MIXERINPUTS_BYTE_HISTORY); //142
+    static constexpr int MIXERCONTEXTS = (16 * 8) + 4 + 256 + (256 * 8) + 2048 + 4096; //8580
+    static constexpr int MIXERCONTEXTSETS = 6;
     NormalModel(Shared* const sh, uint64_t cmSize);
 
     /**

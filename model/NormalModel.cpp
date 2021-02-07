@@ -7,6 +7,8 @@ NormalModel::NormalModel(Shared* const sh, const uint64_t cmSize) :
   assert(isPowerOf2(cmSize));
 }
 
+//note: MatchModel uses hashes for 8-16-24-32 byte strings, 
+//      it's our responsibility to genereate them
 void NormalModel::updateHashes() {
   INJECT_SHARED_c1
   uint64_t* cxt = shared->State.cxt;
@@ -35,17 +37,13 @@ void NormalModel::mix(Mixer &m) {
 
   int order = shared->State.order = max(0, cm.order - (nCM - 15)); //0-15
   assert(order <= 15);
-  m.set(order << 3 | bpos, 8*16);
+  m.set(order << 3 | bpos, 16 * 8);
+  m.set(order >> 2, 4);
+
+  INJECT_SHARED_c4
+  m.set(c0, 256);
+  m.set(c1 << 3 | bpos, 256 * 8);
+  m.set(finalize64(hash(c4), 11), 2048);
+  m.set(finalize64(hash(c4 & 0xffff, c0), 12), 4096);
 }
 
-void NormalModel::mixPost(Mixer &m) {
-  INJECT_SHARED_c0
-  INJECT_SHARED_c1
-  INJECT_SHARED_c4
-  INJECT_SHARED_bpos
-  m.set(c0, 256);
-  m.set(c1<<3 | bpos, 2048);
-  m.set(shared->State.order << 4 | finalize64(hash(c1), 4), 16*16);
-  m.set(finalize64(hash(c4), 8), 256);
-  m.set(finalize64(hash(c4 & 0xffff, c0), 8), 256);
-}
