@@ -24,7 +24,7 @@
 Models::Models(Shared* const sh) : shared(sh) {}
 
 auto Models::normalModel() -> NormalModel & {
-  static NormalModel instance {shared, shared->mem * 64};
+  static NormalModel instance {shared, shared->mem * 32};
   return instance;
 }
 
@@ -34,7 +34,7 @@ auto Models::matchModel() -> MatchModel & {
 }
 
 auto Models::lineModel() -> LineModel & {
-  static LineModel instance {shared, shared->mem * 2};
+  static LineModel instance {shared, shared->mem * 32};
   return instance;
 }
 
