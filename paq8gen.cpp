@@ -4,11 +4,12 @@
   see CHANGELOG for version history
 */
 
+
 //////////////////////// Versioning ////////////////////////////////////////
 
 #define PROGNAME     "paq8gen"
-#define PROGVERSION  "3"  //update version here before publishing your changes
-#define PROGYEAR     "2020"
+#define PROGVERSION  "4"  //update version here before publishing your changes
+#define PROGYEAR     "2021"
 
 
 #include "utils.hpp"
@@ -34,10 +35,10 @@ static void printHelp() {
          "  " PROGNAME " -LEVEL[SWITCHES] INPUTSPEC [OUTPUTSPEC]\n"
          "\n"
          "    -LEVEL:\n"
-         "      -0 = no compression, only transformations when applicable (uses 29 MB)\n"
-         "      -1 -2 -3 = compress using less memory (85, 94, 113 MB)\n"
-         "      -4 -5 -6 -7 -8 -9 = use more memory (152, 229, 383, 691, 1306, 2537 MB)\n"
-         "      -10  -11  -12     = use even more memory (5000, 9925, 18751 MB)\n"
+         "      -0 = no compression, only transformations when applicable (uses 33 MB)\n"
+         "      -1 -2 -3 = compress using less memory (88, 97, 116 MB)\n"
+         "      -4 -5 -6 -7 -8 -9 = use more memory (153, 228, 378, 678, 1278, 2478 MB)\n"
+         "      -10  -11  -12     = use even more memory (4877, 9676, 19274 MB)\n"
          "\n"
          "    INPUTSPEC:\n"
          "    The input may be a FILE or a PATH/FILE.\n"

@@ -36,3 +36,11 @@ paq8gen_v3 by Zoltán Gotthardt
 - Cleaned up NormalModel, refined some contexts
 - Cleaned up SSE stage and Shared
 - Tweaks, cosmetic changes
+
+paq8gen_v4 by Zoltán Gotthardt
+2021.02.07
+- Small tweaks in MormalModel, LineModel and MatchModel
+- Small tweak in APMPost: decreased a-priory counts
+- Small tweak in SSE stage: using two APMPost maps
+- Tweaked model memory use
+- Tweaked mixer scaling
