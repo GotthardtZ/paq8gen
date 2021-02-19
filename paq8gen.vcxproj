@@ -310,9 +310,7 @@
     <ClInclude Include="HashElementForStationaryMap.hpp" />
     <ClInclude Include="HashTable.hpp" />
     <ClInclude Include="Ilog.hpp" />
-    <ClInclude Include="IndirectContext.hpp" />
     <ClInclude Include="IPredictor.hpp" />
-    <ClInclude Include="LargeIndirectContext.hpp" />
     <ClInclude Include="LargeStationaryMap.hpp" />
     <ClInclude Include="Mixer.hpp" />
     <ClInclude Include="MixerFactory.hpp" />
