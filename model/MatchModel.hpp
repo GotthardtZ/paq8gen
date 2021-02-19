@@ -4,7 +4,6 @@
 #include "../Shared.hpp"
 #include "../ContextMap2.hpp"
 #include "../HashElementForMatchPositions.hpp"
-#include "../IndirectContext.hpp"
 #include "../LargeStationaryMap.hpp"
 #include "../StationaryMap.hpp"
 
@@ -14,30 +13,26 @@
  * This model monitors byte sequences and keeps their most recent positions in a hashtable.
  * When the current byte sequence matches an older sequence (having the same hash) the model predicts the forthcoming bits.
  */
-class MatchModel {
+class MatchModel : IPredictor {
 private:
     static constexpr int nCM = 2;
     static constexpr int nST = 3;
     static constexpr int nLSM = 1;
-    static constexpr int nSM = 1;
     Shared * const shared;
     Array<HashElementForMatchPositions> hashtable;
     StateMap stateMaps[nST];
     ContextMap2 cm;
-    LargeStationaryMap mapL[nLSM];
-    StationaryMap map[nSM];
-    static constexpr uint32_t iCtxBits = 7;
-    IndirectContext<uint8_t> iCtx;
+    LargeStationaryMap mapL;
     uint32_t ctx[nST] {0};
     const int hashBits;
     Ilog *ilog = &Ilog::getInstance();
 
-    static constexpr int MINLEN_RM = 8; //minimum length in recovery mode before we "fully recover"
-    static constexpr int MINLEN_RM_LE = 16; //minimum length in recovery mode before we "fully recover" for Low Entropy content
-    static constexpr int LEN1 = 8;
-    static constexpr int LEN2 = 16;
+    static constexpr int MINLEN_RM = 5; //minimum length in recovery mode before we "fully recover"
+    static constexpr int MINLEN_RM_LE = 0; //minimum length in recovery mode before we "fully recover" for Low Entropy content (0 = recover immediately)
+    static constexpr int LEN1 = 12;
+    static constexpr int LEN2 = 18;
     static constexpr int LEN3 = 24;
-    static constexpr int LEN4 = 32;
+    static constexpr int LEN4 = 30;
 
     struct MatchInfo {
       uint32_t length = 0; /**< rebased length of match (length=1 represents the smallest accepted match length), or 0 if no match */
@@ -125,7 +120,7 @@ private:
             if (length < 65535) {
               length++;
             }
-            if (isInRecoveryMode() && recoveryModePos() >= (shared->State.LineModel.firstLetter == 1 ? MINLEN_RM_LE : MINLEN_RM)) { // recovery seems to be successful and stable -> exit recovery mode
+            if (isInRecoveryMode() && recoveryModePos() >= (shared->State.LineModel.lineType == 1 ? MINLEN_RM_LE : MINLEN_RM)) { // recovery seems to be successful and stable -> exit recovery mode
               lengthBak = indexBak = 0; // purge backup
             }
           }
@@ -183,7 +178,7 @@ private:
       }
     }
 
-    static constexpr size_t N = 4;
+    static constexpr size_t N = 4; // maximum number of match candidates
     Array<MatchInfo> matchCandidates{ N };
     uint32_t numberOfActiveCandidates = 0;
 
@@ -192,10 +187,9 @@ public:
       2 + // direct inputs based on expectedBit
       nCM * (ContextMap2::MIXERINPUTS + ContextMap2::MIXERINPUTS_RUN_STATS) + 
       nST * 2 +
-      nLSM * LargeStationaryMap::MIXERINPUTS +
-      nSM * StationaryMap::MIXERINPUTS; // 24
-    static constexpr int MIXERCONTEXTS = 12 + (3 * 8);
-    static constexpr int MIXERCONTEXTSETS = 2;
+      nLSM * LargeStationaryMap::MIXERINPUTS; // 21
+    static constexpr int MIXERCONTEXTS = 20 + (4 * 8) + ((N + 1) * (N + 1) * 8);
+    static constexpr int MIXERCONTEXTSETS = 3;
     MatchModel(Shared* const sh, const uint64_t hashtablesize, const uint64_t mapmemorysize);
     void update();
     void mix(Mixer &m);

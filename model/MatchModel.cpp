@@ -7,13 +7,9 @@ MatchModel::MatchModel(Shared* const sh, const uint64_t hashtablesize, const uin
              {sh, 1, 8 * 256 * 256 + 1, 255, StateMap::Generic},
              {sh, 1, 256 * 256,         255, StateMap::Generic}},
   cm(sh, mapmemorysize, nCM, 64),
-  mapL{ /* LargeStationaryMap : HashBits, Scale=64, Rate=16  */
-        {sh, 1, 20}, // effective bits: ~22
-  },
-  map { /* StationaryMap : BitsOfContext, InputBits, Scale=64, Rate=16  */
-        {sh, 1 /*< leading bit */ + iCtxBits + 3 /*< length3Rm */, 1}
-  }, 
-  iCtx{15, 1, iCtxBits},
+  mapL /* LargeStationaryMap : HashBits, Scale=64, Rate=16  */
+        {sh, nLSM, 20} // effective bits: ~22
+  ,
   hashBits(ilog2(uint32_t(hashtable.size())))
 {
   assert(isPowerOf2(hashtablesize));
@@ -22,11 +18,12 @@ MatchModel::MatchModel(Shared* const sh, const uint64_t hashtablesize, const uin
 
 void MatchModel::update() {
 
+  //update active candidates, remove dead candidatesq
   size_t n = max(numberOfActiveCandidates, 1);
   for (size_t i = 0; i < n; i++) {
     MatchInfo* matchInfo = &matchCandidates[i];
     matchInfo->update(shared);
-    if (numberOfActiveCandidates != 0 && matchInfo->length == 0 && !matchInfo->delta && matchInfo->lengthBak==0) {
+    if (numberOfActiveCandidates != 0 && matchInfo->isInNoMatchMode()) {
       numberOfActiveCandidates--;
       if (numberOfActiveCandidates == i)
         break;
@@ -74,7 +71,7 @@ void MatchModel::update() {
 }
 
 void MatchModel::mix(Mixer &m) {
-  update();
+  shared->GetUpdateBroadcaster()->subscribe(this);
 
   for( uint32_t i = 0; i < nST; i++ ) { // reset contexts
     ctx[i] = 0;
@@ -97,6 +94,19 @@ void MatchModel::mix(Mixer &m) {
   INJECT_SHARED_c0
   INJECT_SHARED_c1
   const int expectedBit = length != 0 ? (expectedByte >> (7 - bpos)) & 1 : 0;
+
+  uint32_t n0 = 0;
+  uint32_t n1 = 0;
+  for (size_t i = 0; i < numberOfActiveCandidates; i++) {
+    if (matchCandidates[i].length == 0)
+      continue;
+    int expectedBit = (matchCandidates[i].expectedByte >> (7 - bpos)) & 1;
+    n0 += 1 - expectedBit;
+    n1 += expectedBit;
+  }
+  
+  const bool isUncertain = n0 != 0 && n1 != 0;
+
   uint32_t denselength = 0; // 0..27
   if (length != 0) {
     if (length <= 16) {
@@ -107,8 +117,8 @@ void MatchModel::mix(Mixer &m) {
     ctx[0] = (denselength << 9) | (expectedBit << 8) | c0; // 1..28*512
     ctx[1] = ((expectedByte << 11) | (bpos << 8) | c1) + 1;
     const int sign = 2 * expectedBit - 1;
-    m.add(sign * (min(length, 32u) << 5)); // +/- 32..1024
-    m.add(sign * (ilog->log(min(length, 65535u)) << 2)); // +/-  0..1024
+    m.add(sign * ((min(length, 32u) << 5) >> isUncertain)); // +/- 32..1024
+    m.add(sign * ((ilog->log(min(length, 65535u)) << 2) >> isUncertain)); // +/-  0..1024
   } else { // no match at all or delta mode
     m.add(0);
     m.add(0);
@@ -138,8 +148,15 @@ void MatchModel::mix(Mixer &m) {
     isInDeltaMode ? 1 :
     isInPreRecoveryMode ? 2 :
     isInRecoveryMode ? 3 :
-    3 + length2; //0-7 (3 bits)
-  
+    4 + length2; //0-7
+
+  const uint32_t mCtx =
+    isInNoMatchMode ? 0 :
+    isInDeltaMode ? 1 :
+    isInPreRecoveryMode ? 2 :
+    isInRecoveryMode ? 3 :
+    4 + (length2 << 2 | expectedBit << 1 | isUncertain); //0..19
+
   //bytewise contexts
   INJECT_SHARED_c4
   if( bpos == 0 ) {
@@ -150,31 +167,21 @@ void MatchModel::mix(Mixer &m) {
   cm.mix(m);
 
   //bitwise contexts
-  mapL[0].set(hash(expectedByte, c0, c4 & 0x00ffffff, mode)); // max context bits: 8+8+24+3 = 43 bits -> hashed into ~22 bits
-  mapL[0].mix(m);
+  mapL.set(hash(c0, c4 & 0x00ffffff, mCtx)); // max context bits: 8+8+24+3 = 43 bits -> hashed into ~22 bits
+  mapL.mix(m);
 
-  const uint32_t mCtx =
-    isInNoMatchMode ? 0 :
-    isInDeltaMode ? 1 :
-    isInPreRecoveryMode ? 2 :
-    isInRecoveryMode ? 3 :
-    4 + (length2 << 1 | expectedBit); //0..11
-
-  INJECT_SHARED_y
-  iCtx += y;
-  iCtx = (bpos << 12) | (c1 << 4) | min(mCtx, 15u); // 15 bits
-  map[0].set(iCtx() << 3 | mode); // (max 7 bits + 1 leading bit) + 3 bits
-  map[0].mix(m);
-
+  
   uint32_t lengthCtx =
     length == 0 ? 0 :
-    length > (LEN2 - LEN1) ? 1 : 2; //0..2
+    isUncertain ? 1 :
+    length < 16 ? 2 :
+    3;
 
-  m.set(mCtx, 12);
-  m.set(lengthCtx << 3 | bpos, 3 * 8);
+  m.set(mCtx, 20);
+  m.set(lengthCtx << 3 | bpos, 4 * 8);
+  m.set((n0 * (N+1) + n1) << 3 | bpos, (N + 1) * (N + 1) * 8);
 
-  shared->State.Match.lengthCtx = lengthCtx; //0..2
-  shared->State.Match.expectedBit = length == 0 ? 0 : 1 + expectedBit; //0..2
+  shared->State.Match.matchCtx = mCtx; //0..19
   shared->State.Match.expectedByte = length != 0 ? expectedByte : 0;
 
 }
