@@ -6,51 +6,51 @@ LineModel::LineModel(Shared* const sh, const uint64_t size) :
   cm(sh, size, nCM, 64)
 {}
 
+
+void LineModel::update() {
+  INJECT_SHARED_bpos
+  assert(bpos == 0);
+  INJECT_SHARED_pos
+  INJECT_SHARED_c1
+  INJECT_SHARED_blockPos
+  const auto isNewline = (c1 == NEW_LINE || blockPos == 0);
+  if (isNewline) { // a new line has just started (or: zero in asciiz or in binary data)
+    nl2 = nl1;
+    nl1 = pos;
+    line0 = 0;
+    linePos3 = 0;
+    lineType = 0;
+  }
+  else {
+    line0 = combine64(line0, c1);
+    linePos3++;
+    if (linePos3 == 3)
+      linePos3 = 0;
+  }
+
+  uint64_t col = pos - nl1;
+  if (col == 1) {
+    if (('A' <= c1 && c1 <= 'Z') || ('a' <= c1 && c1 <= 'z'))
+      lineType = 1; //sequence
+    else if (c1 == '>')
+      lineType = 2; //sequence name
+    else
+      lineType = 0; //other
+    shared->State.LineModel.lineType = lineType; 
+    shared->State.LineModel.linePos3 = linePos3;
+  }
+}
+
 void LineModel::mix(Mixer &m) {
   INJECT_SHARED_bpos
+  if (bpos == 7) {
+    shared->GetUpdateBroadcaster()->subscribe(this);
+  }
   if (bpos == 0) {
+    INJECT_SHARED_buf
     INJECT_SHARED_pos
     INJECT_SHARED_c1
-
-    uint8_t g = c1;
-    if (g >= 128) {
-      //utf8 code points (weak context)
-      if ((g & 0xf8u) == 0xf0) g = 1;
-      else if ((g & 0xf0u) == 0xe0) g = 2;
-      else if ((g & 0xe0u) == 0xc0) g = 3;
-      else if ((g & 0xc0u) == 0x80) g = 4; //the rest of the values
-      else if (g == 0xff) g = 5;
-      else g = c1 & 0xf0u;
-    }
-    else if (g >= '0' && g <= '9') g = '0';
-    else if (g >= 'a' && g <= 'z') g = 'a';
-    else if (g >= 'A' && g <= 'Z') g = 'A';
-    groups = groups << 8 | g;
-
-    const uint8_t RH = CM_USE_RUN_STATS | CM_USE_BYTE_HISTORY;
-    const auto isNewline = c1 == NEW_LINE || c1 == 0;
-    if (isNewline) { // a new line has just started (or: zero in asciiz or in binary data)
-      nl2 = nl1;
-      nl1 = pos;
-      line0 = 0;
-      groups = 0;
-      firstChar = 0;
-    }
-    else {
-      line0 = combine64(line0, c1);
-    }
-
     uint64_t col = pos - nl1;
-    if (col == 1) {
-      if ('A' <= c1 && c1 <= 'Z')
-        firstChar = 1;
-      else if ('a' <= c1 && c1 <= 'z')
-        firstChar = 1;
-      else 
-        firstChar = 2;
-
-    }
-    INJECT_SHARED_buf
     const uint8_t cAbove = buf[nl2 + col];
     const uint8_t pCAbove = buf[nl2 + col - 1];
 
@@ -59,7 +59,6 @@ void LineModel::mix(Mixer &m) {
     const uint32_t aboveCtx = cAbove << 1U | uint32_t(isPrevCharMatchAbove);
     if (isNewLineStart) {
       lineMatch = 0; //first char not yet known = nothing to match
-      groups = 0;
     }
     else if (lineMatch >= 0 && isPrevCharMatchAbove) {
       lineMatch = min(lineMatch + 1, maxLineMatch); //match continues
@@ -68,58 +67,63 @@ void LineModel::mix(Mixer &m) {
       lineMatch = -1; //match does not continue
     }
 
+
     uint64_t i = 0;
+    const uint8_t RH = CM_USE_RUN_STATS | CM_USE_BYTE_HISTORY;
 
     cm.set(RH, hash(++i, line0));
-
-    // context: matches with the previous line
-    if (firstChar != 1 && lineMatch >= 0) { // not [a-zA-Z]
-      cm.set(RH, hash(++i, cAbove, lineMatch));
-    }
-    else {
-      cm.skip(RH); i++;
-    }
-
-    if (firstChar != 1) { // not [a-zA-Z]
+    if (lineType != 1) { // not [a-zA-Z]
       cm.set(RH, hash(++i, aboveCtx, c1));
       cm.set(RH, hash(++i, col << 9 | aboveCtx, c1));
-      const int lineLength = nl1 - nl2;
       cm.set(RH, hash(++i, nl1 - nl2, col, aboveCtx));
-      cm.set(RH, hash(++i, nl1 - nl2, col, aboveCtx, c1));
-      cm.set(RH, hash(++i, groups & 0xFF));
-      cm.set(RH, hash(++i, groups & 0xFFFF));
+      cm.set(RH, hash(++i, cAbove, lineMatch + 1));
     }
     else {
-      cm.skipn(RH, 6); 
-      i += 6;
+      cm.skipn(RH, 4); 
+      i += 4;
     }
 
-    // modeling line content per column (and NEW_LINE is some extent)
-    cm.set(RH, hash(++i, col));
-    cm.set(RH, hash(++i, col, c1));
-
-    if (firstChar == 1) { // [a-zA-Z]
-      INJECT_SHARED_c4
-      cm.set(RH, hash(++i, col, c4));
-      INJECT_SHARED_c8
-      cm.set(RH, hash(++i, col, c4, c8));
+    INJECT_SHARED_c4
+    uint32_t lpfc = linePos3 << 2 | lineType;
+    cm.set(RH, hash(++i, lpfc));
+    cm.set(RH, hash(++i, lpfc, c1));
+    cm.set(RH, hash(++i, lpfc, c4 & 0xffff));
+    cm.set(RH, hash(++i, lpfc, c4 & 0xffffff));
+    if (linePos3 == 0) {
+      cm.set(RH, hash(++i, lpfc));
+      cm.skip(RH); i++;
+      cm.skip(RH); i++;
     }
-    else {
-      cm.skipn(RH, 2);
-      i += 2;
+    else if (linePos3 == 1) {
+      cm.skip(RH); i++;
+      cm.set(RH, hash(++i, lpfc << 8 | c1));
+      cm.skip(RH); i++;
+    }
+    else { //if (linePos3 == 2)
+      cm.skip(RH); i++;
+      cm.skip(RH); i++;
+      cm.set(RH, hash(++i, c4 & 0xffff, lpfc));
     }
 
-    cm.set(RH, hash(++i, nl1)); // chars occurring in this paragraph (order 0)
-    cm.set(RH, hash(++i, firstChar)); // order 0 context in paragraphs like this
+    // modeling line content per column (and NEW_LINE in some extent)
+    cm.set(RH, hash(++i, lineType, col));
+    cm.set(RH, hash(++i, lineType, col, c1));
+    cm.set(RH, hash(++i, lineType, col, c4));
+
+    INJECT_SHARED_c8
+    cm.set(RH, hash(++i, lineType, col, c8, buf(9) << 16 | buf(10) << 8 | buf(11)));
+
+    cm.set(RH, hash(++i, lineType)); // order 0 context in paragraphs like this
 
     assert(i == nCM);
   }
   cm.mix(m);
-  uint32_t order = min(cm.order, 15);
-  
-  m.set(firstChar + ((shared->State.order << 3) | (order >> 1)) * 3, 3 * 16 * 8);
-  m.set(groups & 0xff, 256);
 
-  shared->State.LineModel.firstLetter = firstChar;
+  const uint32_t order = max(0, cm.order - (nCM - 15));
+  assert(order <= 15);
+
+  m.set(lineType + ((shared->State.order << 3) | (order >> 1)) * 3, 3 * 16 * 8);
+  m.set(linePos3 * 3 + lineType, 3 * 3);
+
 }
 
