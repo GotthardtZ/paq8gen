@@ -7,23 +7,27 @@ NormalModel::NormalModel(Shared* const sh, const uint64_t cmSize) :
   assert(isPowerOf2(cmSize));
 }
 
-//note: MatchModel uses hashes for 8-16-24-32 byte strings, 
+//note: MatchModel uses hashes for up to 30 byte long strings, 
 //      it's our responsibility to genereate them
-void NormalModel::updateHashes() {
+void NormalModel::update() {
+  INJECT_SHARED_bpos
+  assert(bpos == 0);
   INJECT_SHARED_c1
   uint64_t* cxt = shared->State.cxt;
-  for( uint64_t i = 32; i > 0; --i ) {
+  for( uint64_t i = 30; i > 0; --i ) {
     cxt[i] = (cxt[i - 1] + c1 + i) * PHI64;
   }
 }
 
 void NormalModel::mix(Mixer &m) {
   INJECT_SHARED_bpos
+  if (bpos == 7) {
+    shared->GetUpdateBroadcaster()->subscribe(this);
+  }
   if( bpos == 0 ) {
-    updateHashes();
     uint64_t* cxt = shared->State.cxt;
     const uint8_t RH = CM_USE_RUN_STATS | CM_USE_BYTE_HISTORY;
-    for(uint64_t i = 1; i <= 24; i++ ) {
+    for(uint64_t i = 1; i <= nCM; i++ ) {
       cm.set(RH, cxt[i]);
     }
   }

@@ -57,18 +57,18 @@ public:
 
       //MatchModel
       struct {
-        uint32_t lengthCtx;   //used by SSE stage
-        uint8_t expectedBit; //used by SSE stage
+        uint8_t matchCtx;   //used by SSE stage
         uint8_t expectedByte; //used by SSE stage
       } Match{};
 
       //NormalModel
       int order{};
-      uint64_t cxt[32+1]{}; // context hashes
+      uint64_t cxt[30+1]{}; // context hashes
 
       //LineModel
       struct {
-        uint8_t firstLetter; //used by SSE stage
+        uint8_t lineType; //used by SSE stage
+        uint8_t linePos3;
       } LineModel{};
 
     } State{};
