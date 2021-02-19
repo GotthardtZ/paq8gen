@@ -8,7 +8,7 @@
 //////////////////////// Versioning ////////////////////////////////////////
 
 #define PROGNAME     "paq8gen"
-#define PROGVERSION  "4"  //update version here before publishing your changes
+#define PROGVERSION  "5"  //update version here before publishing your changes
 #define PROGYEAR     "2021"
 
 
@@ -35,10 +35,10 @@ static void printHelp() {
          "  " PROGNAME " -LEVEL[SWITCHES] INPUTSPEC [OUTPUTSPEC]\n"
          "\n"
          "    -LEVEL:\n"
-         "      -0 = no compression, only transformations when applicable (uses 33 MB)\n"
-         "      -1 -2 -3 = compress using less memory (88, 97, 116 MB)\n"
-         "      -4 -5 -6 -7 -8 -9 = use more memory (153, 228, 378, 678, 1278, 2478 MB)\n"
-         "      -10  -11  -12     = use even more memory (4877, 9676, 19274 MB)\n"
+         "      -0 = no compression, only transformations when applicable (uses 34 MB)\n"
+         "      -1 -2 -3 = compress using less memory (89, 98, 117 MB)\n"
+         "      -4 -5 -6 -7 -8 -9 = use more memory (155, 230, 380, 679, 1279, 2479 MB)\n"
+         "      -10  -11  -12     = use even more memory (4879, 9678, 19276 MB)\n"
          "\n"
          "    INPUTSPEC:\n"
          "    The input may be a FILE or a PATH/FILE.\n"

@@ -37,6 +37,7 @@ paq8gen_v3 by Zoltán Gotthardt
 - Cleaned up SSE stage and Shared
 - Tweaks, cosmetic changes
 
+
 paq8gen_v4 by Zoltán Gotthardt
 2021.02.07
 - Small tweaks in MormalModel, LineModel and MatchModel
@@ -44,3 +45,15 @@ paq8gen_v4 by Zoltán Gotthardt
 - Small tweak in SSE stage: using two APMPost maps
 - Tweaked model memory use
 - Tweaked mixer scaling
+
+
+paq8gen_v5 by Zoltán Gotthardt
+2021.02.20
+- Simplified replacement strategy in Bucket16
+- Decreased final learning rate from 8 to 6 in last mixer layer
+- Removed IndirectContext and LargeIndirectContext
+- Refined SSE stage: now using 4 high precision APMPost maps instead of 2
+- Removed not useful contexts from LineModel, added contexts to better model codons
+- Removed not useful contexts form MatchModel, added context to identify ambiguous matches; now using initial match lengths of multiple of 3
+- Cosmetic changes in NormalModel and Shared
+
