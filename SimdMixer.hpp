@@ -2,7 +2,6 @@
 #define PAQ8GEN_SIMDMIXER_HPP
 
 #include "UpdateBroadcaster.hpp"
-#include "BitCount.hpp"
 #include "Ilog.hpp"
 #include "Mixer.hpp"
 #include "Squash.hpp"
@@ -67,7 +66,7 @@ public:
           if (cxt[i] != UINT32_MAX) {
             const int err = target - pr[i];
             int rate = rates[i];
-            if (mp == 0) {
+            if (mp == nullptr) {
               if (rate > MIN_LEARNING_RATE_S1) rate--;
               rates[i] = rate;
             }
