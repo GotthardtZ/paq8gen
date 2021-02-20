@@ -30,7 +30,7 @@ void LineModel::update() {
 
   uint64_t col = pos - nl1;
   if (col == 1) {
-    if (('A' <= c1 && c1 <= 'Z') || ('a' <= c1 && c1 <= 'z'))
+    if (('A' <= c1 && c1 <= 'Z') || ('a' <= c1 && c1 <= 'z') || c1 < 32 /*for alphabet-reordered files*/)
       lineType = 1; //sequence
     else if (c1 == '>')
       lineType = 2; //sequence name
