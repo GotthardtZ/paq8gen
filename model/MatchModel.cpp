@@ -105,7 +105,7 @@ void MatchModel::mix(Mixer &m) {
     n1 += expectedBit;
   }
   
-  const bool isUncertain = n0 != 0 && n1 != 0;
+  const int isUncertain = static_cast<int>(n0 != 0 && n1 != 0);
 
   uint32_t denselength = 0; // 0..27
   if (length != 0) {

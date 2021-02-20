@@ -558,7 +558,7 @@ auto main(int argc, char **argv) -> int {
     return 0;
   } else {
     if(argc!=argc_utf8)quit("Error preparing command line arguments.");
-    argv_utf8=new char*[argc_utf8+1];
+    argv_utf8=new char*[argc_utf8+UINT64_C(1)];
     for(int i=0; i<argc_utf8; i++) {
       wchar_t *s=szArglist[i];
       int buffersize = WideCharToMultiByte(CP_UTF8,0,s,-1,NULL,0,NULL,NULL);

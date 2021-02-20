@@ -27,8 +27,8 @@ private:
     const int hashBits;
     Ilog *ilog = &Ilog::getInstance();
 
-    static constexpr int MINLEN_RM = 5; //minimum length in recovery mode before we "fully recover"
-    static constexpr int MINLEN_RM_LE = 0; //minimum length in recovery mode before we "fully recover" for Low Entropy content (0 = recover immediately)
+    static constexpr uint32_t MINLEN_RM = 5; //minimum length in recovery mode before we "fully recover"
+    static constexpr uint32_t MINLEN_RM_LE = 0; //minimum length in recovery mode before we "fully recover" for Low Entropy content (0 = recover immediately)
     static constexpr int LEN1 = 12;
     static constexpr int LEN2 = 18;
     static constexpr int LEN3 = 24;
