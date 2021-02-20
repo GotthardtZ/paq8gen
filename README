@@ -43,27 +43,30 @@ the encode.su forum thread (https://encode.su/threads/3549-paq8gen-sequence-comp
 HOW DOES IT WORK?
 -----------------
 
-Data compression is carried out by compressing the input file(s) bit by bit using 
+Data compression is carried out by compressing the input file bit by bit using 
 context mixing i.e. mixing predictions from many models. 
 
----------------
+----------------
 PAQ8GEN ARCHIVES
----------------
+----------------
 
-A PAQ8GEN archive contains files in a highly compressed format.
+A PAQ8GEN archive stores genomic sequence contents in a highly compressed format.
+Compression is not limited to genomic sequences, you can supply any file to PAQ8GEN 
+in any format.
 
 You can recognize a PAQ8GEN archive from its file extension. The file extension reflects 
 the exact PAQ8GEN version that created the archive. You may also examine the first few
-bytes of the file. If it reads "paq8gen" than it is (most probably) a PAQ8GEN archive. 
+bytes of the file. If it reads "paq8gen" then it is (most probably) a PAQ8GEN archive. 
 Exact version information cannot be inferred from the archive content.
 
 A PAQ8GEN archive may contain only a single file without any file attributes. Only the 
-file content is preserved.  There is no built-in multiple file support or folder 
-compression support.
+file content is preserved.  There is no built-in multiple file or folder compression 
+support.
 
 More notes:
 Files and archives larger than 2 GB are not (yet) supported.
 PAQ8GEN archives are not compatible with previous or future PAQ8GEN releases.
+PAQ8GEN is tuned for the FASTA format.
 
 ----------
 HOW TO USE
@@ -106,7 +109,7 @@ gcc/clang users on Linux/macOS may use the following commands to build:
  make
 
 The following compilers were tested and verified to compile/work correctly
-in this release  or in an earlier release (mostly paq8px):
+in this release or in an earlier release (mostly paq8px):
 
   - Visual Studio 2019 Community Edition (Windows)
   - MinGW-w64 9.3.0 (Windows)
