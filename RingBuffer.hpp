@@ -18,9 +18,6 @@ public:
      * @param size number of bytes in array
      */
     explicit RingBuffer(const uint32_t size = 0) : b(size), mask(size - 1) {
-#ifdef VERBOSE
-      printf("Created RingBuffer with size = %d\n", size);
-#endif
       assert(isPowerOf2(size));
     }
 

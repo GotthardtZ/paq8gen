@@ -102,9 +102,6 @@ public:
 
 template<class T, const int Align>
 void Array<T, Align>::create(uint64_t requestedSize) {
-#ifdef VERBOSE
-  printf("Created Array of size %" PRIu64 "\n", requestedSize);
-#endif
   assert(isPowerOf2(Align));
   usedSize = reservedSize = requestedSize;
   if( requestedSize == 0 ) {

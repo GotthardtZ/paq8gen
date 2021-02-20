@@ -6,7 +6,6 @@ check_ipo_supported(RESULT supported OUTPUT error)
 
 option(NATIVECPU "Whether to build for your cpu (vs. the general public)" OFF)
 option(NDEBUG "Whether to suppress asserts and array bound checks" ON)
-option(VERBOSE "Whether to print verbose debug information to screen" OFF)
 
 if (NATIVECPU)
     add_definitions(-march=native -mtune=native)

@@ -29,9 +29,6 @@ private:
 
 public:
     SIMDMixer(const Shared* const sh, const int n, const int m, const int s) : Mixer(sh, ((n + (simdWidth() - 1)) & -(simdWidth())), m, s) {
-#ifdef VERBOSE
-      printf("Created SIMDMixer with n = %d, m = %d, s = %d\n", n, m, s);
-#endif
       assert((this->n & (simdWidth() - 1)) == 0);
       assert(this->m > 0);
       assert(this->s > 0);
