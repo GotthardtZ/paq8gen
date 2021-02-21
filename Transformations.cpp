@@ -5,8 +5,11 @@
 // 1) interleave/deinterleave sequence names and sequences
 // 2) alphabet-transformation (for the sequences only)
 
+static constexpr uint8_t mapping[16] = { 71,67,65,84,78,89,75,82,87,77,10,83,72,68,86,66 }; // "GCATNYKRWM{\n}SHDVB"
+static constexpr uint8_t mapping_reverse[25] = { 2,15,1,13,16,17,0,12,18,19,6,20,9,4,21,22,23,7,11,3,24,14,8,25,5 };
+
 /*
-alphabet-transformation is based on the following frequences:
+alphabet-transformation is based on the following frequencies:
 
 65	A	388931944
 66	B	59
@@ -37,11 +40,8 @@ alphabet-transformation is based on the following frequences:
 
 */
 
-#define REMOVE_FOR_SARS_COV2_CHALLENGE
-
-#ifndef REMOVE_FOR_SARS_COV2_CHALLENGE
 // deinterleave names and sequences + transform sequence-alphabet to 16-value alphabet (result: better compressible file)
-void do_transform(uint64_t size, uint8_t* buffer/*original file content*/, uint8_t* output /*transformed file content*/) {
+void do_transform(uint64_t size, uint8_t* buffer/*original file content*/, uint8_t* output /*transformed file content - to be compressed*/) {
   int j = 0;
   for (int k = 0; k < 2; k++) {
     for (int i = 0; i < size; i++) {
@@ -59,9 +59,8 @@ void do_transform(uint64_t size, uint8_t* buffer/*original file content*/, uint8
           uint8_t c = buffer[i];
           if (k != 0) {
             //note: 0-15 is actually used; code for \n (10) newline is preserved for line-end detection to work
-            static constexpr uint8_t mapping[25] = { 1,15,3,13,16,17,2,12,18,19,6,20,9,4,21,22,23,7,11,0,24,14,8,25,5 }; 
             if (c != '\n')
-              c = mapping[c - 65];
+              c = mapping_reverse[c - 65];
             output[j] = c;
             j++;
           }
@@ -71,9 +70,9 @@ void do_transform(uint64_t size, uint8_t* buffer/*original file content*/, uint8
   }
 
 }
-#endif
 
-// interleave names and sequences + transform 16-value alphabet o original sequence-alphabet (result: original file)
+
+// interleave names and sequences + transform 16-value alphabet to original sequence-alphabet (result: original file)
 void do_transform_reverse(uint64_t size, uint8_t* buffer /*decompressed file content*/, uint8_t* output /* restored original file content*/) {
   int i = 0; //start of names
   int j = 583867; //start of sequences
@@ -91,7 +90,6 @@ void do_transform_reverse(uint64_t size, uint8_t* buffer /*decompressed file con
     //sequence
     for (;;) {
       //note: code for \n (10) newline is preserved for line-end detection to work
-      static constexpr uint8_t mapping[16] = { 84,65,71,67,78,89,75,82,87,77,10,83,72,68,86,66 }; // "TAGCNYKRWM{\n}SHDVB"
       uint8_t c = buffer[j];
       j++;
       output[k] = mapping[c];
@@ -103,7 +101,6 @@ void do_transform_reverse(uint64_t size, uint8_t* buffer /*decompressed file con
   }
 }
 
-#ifndef REMOVE_FOR_SARS_COV2_CHALLENGE
 void transform_sars_cov2_challenge() {
   const char* input_filename = "coronavirus.unwrapped.fasta";
   const char* output_filename = "c-full";
@@ -122,7 +119,6 @@ void transform_sars_cov2_challenge() {
   f.blockWrite(&output[0], size);
   f.close();
 }
-#endif
 
 
 void transform_sars_cov2_challenge_reverse() {
