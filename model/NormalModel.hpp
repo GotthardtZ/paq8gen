@@ -16,13 +16,14 @@ private:
     Shared * const shared;
     ContextMap2 cm;
     StateMap smOrder1;
+    Stretch * stretch = &Stretch::getInstance();
 public:
     static constexpr int MIXERINPUTS =
       2*nSM + 
       nCM * (ContextMap2::MIXERINPUTS + ContextMap2::MIXERINPUTS_RUN_STATS + ContextMap2::MIXERINPUTS_BYTE_HISTORY); //170
     static constexpr int MIXERCONTEXTS = (16 * 8) + 4 + 256 + (256 * 8) + 2048 + 4096; //8580
     static constexpr int MIXERCONTEXTSETS = 6;
-    NormalModel(Shared* const sh, uint64_t cmSize);
+    NormalModel(Shared* sh, uint64_t cmSize);
 
     /**
      * update order 1..24 context hashes.

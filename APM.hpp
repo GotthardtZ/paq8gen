@@ -14,13 +14,14 @@ private:
     const int N; /**< Number of contexts */
     const int steps;
     int cxt; /**< context index of last prediction */
+    Stretch * stretch = &Stretch::getInstance();
 public:
     /**
      * Creates with @ref n contexts using 4*s*n bytes memory.
      * @param n the number of contexts
      * @param s the number of steps
      */
-    APM(const Shared* const sh, int n, int s);
+    APM(const Shared* sh, int n, int s);
 
     /**
      * a.update() updates probability map. y=(0..1) is the last bit

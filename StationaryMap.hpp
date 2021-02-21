@@ -25,6 +25,7 @@ private:
     uint32_t bCount;
     uint32_t b;
     uint32_t *cp;
+    Stretch * stretch = &Stretch::getInstance();
 
 public:
     /**

@@ -39,7 +39,9 @@ private:
     uint64_t reservedSize {};
     char *ptr {}; /**< Address of allocated memory (may not be aligned) */
     T *data;   /**< Aligned base address of the elements, (ptr <= T) */
+#ifndef CHALLENGE
     ProgramChecker *programChecker = ProgramChecker::getInstance();
+#endif
     void create(uint64_t requestedSize);
 
     [[nodiscard]] inline uint64_t padding() const { return Align - 1; }
@@ -118,7 +120,9 @@ void Array<T, Align>::create(uint64_t requestedSize) {
   data = (T *) (((uintptr_t) ptr + pad) & ~(uintptr_t) pad);
   assert(ptr <= (char *) data && (char *) data <= ptr + Align);
   assert(((uintptr_t) data & (Align - 1)) == 0); //aligned as expected?
+#ifndef CHALLENGE
   programChecker->alloc(bytesToAllocate);
+#endif
 }
 
 template<class T, const int Align>
@@ -130,7 +134,9 @@ void Array<T, Align>::resize(uint64_t newSize) {
   char *oldPtr = ptr;
   T *oldData = data;
   const uint64_t oldSize = usedSize;
+#ifndef CHALLENGE
   programChecker->free(allocatedBytes());
+#endif
   create(newSize);
   if( oldSize > 0 ) {
     assert(oldPtr != nullptr && oldData != nullptr);
@@ -154,7 +160,9 @@ void Array<T, Align>::pushBack(const T &x) {
 
 template<class T, const int Align>
 Array<T, Align>::~Array() {
+#ifndef CHALLENGE
   programChecker->free(allocatedBytes());
+#endif
   free(ptr);
   usedSize = reservedSize = 0;
   data = nullptr;

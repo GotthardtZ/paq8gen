@@ -68,10 +68,11 @@ private:
     const int hashBits;
     int scale;
     uint8_t contextflagsAll;
+    Stretch * stretch = &Stretch::getInstance();
 
     void updatePendingContextsInSlot(HashElementForContextMap* const p, uint32_t c);
     void updatePendingContexts(uint32_t ctx, uint16_t checksum, uint32_t c);
-    size_t getStateByteLocation(const uint32_t bpos, const uint32_t c0);
+    size_t getStateByteLocation(uint32_t bpos, uint32_t c0);
 
 public:
     int order = 0; // is set after mix()
@@ -82,7 +83,7 @@ public:
      * @param scale
      * @param uw
      */
-    ContextMap2(const Shared* const sh, uint64_t size, uint32_t contexts, int scale);
+    ContextMap2(const Shared* sh, uint64_t size, uint32_t contexts, int scale);
 
     /**
      * Set next whole byte context to @ref ctx.

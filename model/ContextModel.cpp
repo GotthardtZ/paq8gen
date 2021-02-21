@@ -1,6 +1,7 @@
 #include "ContextModel.hpp"
 
 ContextModel::ContextModel(Shared* const sh, Models &models) : shared(sh), models(models) {
+#ifndef CHALLENGE
   auto mf = new MixerFactory();
   m = mf->createMixer(
     // this is the maximum case: how many mixer inputs, mixer contexts and mixer context sets are needed (max)
@@ -15,6 +16,19 @@ ContextModel::ContextModel(Shared* const sh, Models &models) : shared(sh), model
     MatchModel::MIXERCONTEXTSETS + NormalModel::MIXERCONTEXTSETS +
     LineModel::MIXERCONTEXTSETS
   );
+#else
+  m = new SIMDMixer( // this is the maximum case: how many mixer inputs, mixer contexts and mixer context sets are needed (max)
+          sh,
+          1 +  //bias
+          MatchModel::MIXERINPUTS + NormalModel::MIXERINPUTS +
+          LineModel::MIXERINPUTS
+          ,
+          MatchModel::MIXERCONTEXTS + NormalModel::MIXERCONTEXTS +
+          LineModel::MIXERCONTEXTS
+          ,
+          MatchModel::MIXERCONTEXTSETS + NormalModel::MIXERCONTEXTSETS +
+          LineModel::MIXERCONTEXTSETS);
+#endif
 }
 
 auto ContextModel::p() -> int {

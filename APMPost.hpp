@@ -22,22 +22,23 @@ public:
      * Creates an instance with @ref n contexts.
      * @param n the number of contexts
      */
-    APMPost(const Shared* const sh, const uint32_t n);
+    APMPost(const Shared* sh, uint32_t n);
     /**
      * Returns adjusted probability in context @ref cx (0 to n-1).
      * @param pr initial (pre-adjusted) probability
      * @param cxt the context
      * @return adjusted probability
      */
-    uint32_t p(const uint32_t pr, const uint32_t cxt);
+    uint32_t p(uint32_t pr, uint32_t cxt);
     void update() override;
 
+#ifndef CHALLENGE
     void print() {
       for (int i = 0; i < 4096; i++) {
         printf("%d\t%d\t%d\n",i,(int)(t[i]>>32), (int)(t[i]&0xffffffff));
       }
     }
-
+#endif
 };
 
 #endif //PAQ8GEN_APMPOST_HPP

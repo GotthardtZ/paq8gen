@@ -8,7 +8,7 @@
 //////////////////////// Versioning ////////////////////////////////////////
 
 #define PROGNAME     "paq8gen"
-#define PROGVERSION  "5"  //update version here before publishing your changes
+#define PROGVERSION  "6"  //update version here before publishing your changes
 #define PROGYEAR     "2021"
 
 
@@ -27,6 +27,11 @@
 
 typedef enum { DoNone, DoCompress, DoExtract, DoCompare } WHATTODO;
 
+#ifdef CHALLENGE
+#define printf(fmt, ...) (0)
+#endif
+
+#ifndef CHALLENGE
 static void printHelp() {
   printf("\n"
          "Free under GPL, http://www.gnu.org/licenses/gpl.txt\n\n"
@@ -137,20 +142,25 @@ static void printCommand(const WHATTODO &whattodo) {
 static void printOptions(Shared *shared) {
   printf(" Level          = %d\n", shared->level);
 }
+#endif
 
 auto processCommandLine(int argc, char **argv) -> int {
+#ifndef CHALLENGE
   ProgramChecker *programChecker = ProgramChecker::getInstance();
+#endif
   Shared shared;
   try {
-
+#ifndef CHALLENGE
     if( !shared.toScreen ) { //we need a minimal feedback when redirected
       fprintf(stderr, PROGNAME " archiver v" PROGVERSION " (c) " PROGYEAR ", Matt Mahoney et al.\n");
     }
     printf(PROGNAME " archiver v" PROGVERSION " (c) " PROGYEAR ", Matt Mahoney et al.\n");
-
+#endif
     // Print help message
     if( argc < 2 ) {
+#ifndef CHALLENGE
       printHelp();
+#endif
       quit();
     }
 
@@ -218,6 +228,7 @@ auto processCommandLine(int argc, char **argv) -> int {
           }
           logfile += argv[i];
         }
+#ifndef CHALLENGE
         else if( strcasecmp(argv[i], "-simd") == 0 ) {
           if( ++i == argc ) {
             quit("The -simd switch requires an instruction set name (NONE,SSE2,SSSE3, AVX2, NEON).");
@@ -235,7 +246,9 @@ auto processCommandLine(int argc, char **argv) -> int {
           } else {
             quit("Invalid -simd option. Use -simd NONE, -simd SSE2, -simd SSSE3, -simd AVX2 or -simd NEON.");
           }
-        } else {
+        }
+#endif
+        else {
           printf("Invalid command: %s", argv[i]);
           quit();
         }
@@ -251,7 +264,7 @@ auto processCommandLine(int argc, char **argv) -> int {
         }
       }
     }
-
+#ifndef CHALLENGE
     // Determine CPU's (and OS) support for SIMD vectorization instruction set
     int detectedSimdIset = simdDetect();
     if( simdIset == -1 ) {
@@ -261,10 +274,12 @@ auto processCommandLine(int argc, char **argv) -> int {
       printf("\nOverriding system highest vectorization support. Expect a crash.");
     }
 
+
     // Print anything only if the user wants/needs to know
     if( verbose || simdIset != detectedSimdIset ) {
       printSimdInfo(simdIset, detectedSimdIset);
     }
+
 
     // Set highest or user selected vectorization mode
     if (simdIset == 11) {
@@ -278,6 +293,7 @@ auto processCommandLine(int argc, char **argv) -> int {
     } else {
       shared.chosenSimd = SIMD_NONE;
     }
+#endif
 
     if( verbose ) {
       printf("\n");
@@ -401,13 +417,13 @@ auto processCommandLine(int argc, char **argv) -> int {
       }
       
       c = archive.getchar();
-      uint8_t level = static_cast<uint8_t>(c);
+      auto level = static_cast<uint8_t>(c);
       if (level > 12) {
         quit("Unexpected compression level setting in archive");
       }
       shared.init(level);
     }
-
+#ifndef CHALLENGE
     if( verbose ) {
       printCommand(whattodo);
       printOptions(&shared);
@@ -415,7 +431,7 @@ auto processCommandLine(int argc, char **argv) -> int {
     printf("\n");
 
     int numberOfFiles = 1; //default for single file mode
-
+#endif
     // Write archive header to archive file
     if( mode == COMPRESS ) {
       printf("Creating archive %s ...\n", archiveName.c_str());
@@ -474,6 +490,7 @@ auto processCommandLine(int argc, char **argv) -> int {
       auto preFlush = en.size();
       en.flush();
       totalSize += en.size() - preFlush; //we consider padding bytes as auxiliary bytes
+#ifndef CHALLENGE
       printf("-----------------------\n");
       printf("Total input size     : %" PRIu64 "\n", contentSize);
       if( verbose ) {
@@ -514,6 +531,7 @@ auto processCommandLine(int argc, char **argv) -> int {
         printf("Results logged to file '%s'\n", logfile.c_str());
         printf("\n");
       }
+#endif
     } else { //decompress
       if( whattodo == DoExtract || whattodo == DoCompare ) {
         FMode fMode = whattodo == DoExtract ? FDECOMPRESS : FCOMPARE;
@@ -528,7 +546,9 @@ auto processCommandLine(int argc, char **argv) -> int {
     }
 
     archive.close();
+#ifndef CHALLENGE
     programChecker->print();
+#endif
   }
     // we catch only the intentional exceptions from quit() to exit gracefully
     // any other exception should result in a crash and must be investigated

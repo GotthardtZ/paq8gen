@@ -1,5 +1,6 @@
 #include "ProgramChecker.hpp"
 
+#ifndef CHALLENGE
 ProgramChecker *ProgramChecker::instance = nullptr;
 
 auto ProgramChecker::getInstance() -> ProgramChecker * {
@@ -34,3 +35,5 @@ void ProgramChecker::print() const {
 ProgramChecker::~ProgramChecker() {
   assert(memUsed == 0); // We expect that all reserved memory is already properly freed
 }
+
+#endif

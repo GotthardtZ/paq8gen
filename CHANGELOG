@@ -57,3 +57,8 @@ paq8gen_v5 by Zoltán Gotthardt
 - Removed not useful contexts form MatchModel, added context to identify ambiguous matches; now using initial match lengths of multiple of 3
 - Cosmetic changes in NormalModel and Shared
 
+paq8gen_v6 by Andrew Epstein
+2021.02.21
+- Cosmetic changes in various places, e.g. removing unneeded `const`
+- Added compile option CHALLENGE, which will build a size-optimized executable
+- No compression changes

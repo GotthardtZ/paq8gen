@@ -28,6 +28,7 @@ private:
     const uint32_t numContexts; /**< Maximum supported contexts */
     uint32_t currentContextIndex; /**< Number of context indexes present in cxt array (0..numContexts-1) */
     Array<uint64_t> contextHashes; /**< context index of last prediction per context */
+    Stretch * stretch = &Stretch::getInstance();
 
 public:
   int order = 0;

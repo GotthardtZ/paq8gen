@@ -77,7 +77,7 @@ public:
       size_t minElementIdx = ElementsInBucket - 1;
 
       //shift elements down (make room for the new element in the first slot)
-      //at the same time owerwrite the element at position "minElementIdx"
+      //at the same time overwrite the element at position "minElementIdx"
       memmove(&elements[1], &elements[0], minElementIdx * sizeof(HashElement<T>));
     }
 
