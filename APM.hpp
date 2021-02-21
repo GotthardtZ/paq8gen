@@ -14,7 +14,9 @@ private:
     const int N; /**< Number of contexts */
     const int steps;
     int cxt; /**< context index of last prediction */
+#ifdef CHALLENGE
     Stretch * stretch = &Stretch::getInstance();
+#endif
 public:
     /**
      * Creates with @ref n contexts using 4*s*n bytes memory.

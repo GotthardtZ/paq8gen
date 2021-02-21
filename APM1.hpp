@@ -20,7 +20,9 @@ private:
     const int n; /**< number of contexts */
     Array<uint16_t> t; /**< [n][33]:  p, context -> p */
     const int rate;
+#ifdef CHALLENGE
     Stretch * stretch = &Stretch::getInstance();
+#endif
 public:
     /**
      * Creates an instance with @ref n contexts and learning rate @ref r.

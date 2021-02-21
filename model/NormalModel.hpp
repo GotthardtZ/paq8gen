@@ -16,7 +16,9 @@ private:
     Shared * const shared;
     ContextMap2 cm;
     StateMap smOrder1;
+#ifdef CHALLENGE
     Stretch * stretch = &Stretch::getInstance();
+#endif
 public:
     static constexpr int MIXERINPUTS =
       2*nSM + 

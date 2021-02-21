@@ -25,8 +25,9 @@ private:
     uint32_t bCount;
     uint32_t b;
     uint32_t *cp;
+#ifdef CHALLENGE
     Stretch * stretch = &Stretch::getInstance();
-
+#endif
 public:
     /**
      * Construct using (2^(BitsOfContext+2))*((2^InputBits)-1) bytes of memory.

@@ -68,9 +68,11 @@ private:
     const int hashBits;
     int scale;
     uint8_t contextflagsAll;
+#ifdef CHALLENGE
     Stretch * stretch = &Stretch::getInstance();
+#endif
 
-    void updatePendingContextsInSlot(HashElementForContextMap* const p, uint32_t c);
+    void updatePendingContextsInSlot(HashElementForContextMap* p, uint32_t c);
     void updatePendingContexts(uint32_t ctx, uint16_t checksum, uint32_t c);
     size_t getStateByteLocation(uint32_t bpos, uint32_t c0);
 
