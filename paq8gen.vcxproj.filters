@@ -120,6 +120,9 @@
     <ClCompile Include="APMPost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Transformations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdaptiveMap.hpp">
