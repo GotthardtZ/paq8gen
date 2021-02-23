@@ -123,6 +123,9 @@
     <ClCompile Include="Transformations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Stretch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdaptiveMap.hpp">
