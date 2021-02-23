@@ -21,6 +21,7 @@ static auto getFileSize(const char *filename) -> uint64_t {
   return fileSize;
 }
 
+#ifndef CHALLENGE
 static void appendToFile(const char *filename, const char *s) {
   FILE *f = openFile(filename, APPEND);
   if( f == nullptr ) {
@@ -30,5 +31,6 @@ static void appendToFile(const char *filename, const char *s) {
     fclose(f);
   }
 }
+#endif
 
 #endif //PAQ8GEN_FILEUTILS2_HPP

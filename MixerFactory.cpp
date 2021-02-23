@@ -1,6 +1,7 @@
+#ifndef CHALLENGE
 #include "MixerFactory.hpp"
-
 auto MixerFactory::createMixer(const Shared* const sh, const int n, const int m, const int s) -> Mixer * {
+
   if( sh->chosenSimd == SIMD_NONE ) {
     return new SIMDMixer<SIMD_NONE>(sh, n, m, s);
   }
@@ -19,3 +20,4 @@ auto MixerFactory::createMixer(const Shared* const sh, const int n, const int m,
   assert(false);
   return nullptr;
 }
+#endif

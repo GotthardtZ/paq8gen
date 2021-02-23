@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <cstdio>
 
+#ifndef CHALLENGE
 /**
  * Track time and memory used.
  * @remark: only @ref Array<T> reports its memory usage, we don't know about other types
@@ -48,4 +49,5 @@ public:
     ~ProgramChecker();
 };
 
+#endif
 #endif //PAQ8GEN_PROGRAMCHECKER_HPP

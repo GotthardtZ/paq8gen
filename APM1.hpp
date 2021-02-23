@@ -20,7 +20,9 @@ private:
     const int n; /**< number of contexts */
     Array<uint16_t> t; /**< [n][33]:  p, context -> p */
     const int rate;
-
+#ifdef CHALLENGE
+    Stretch * stretch = &Stretch::getInstance();
+#endif
 public:
     /**
      * Creates an instance with @ref n contexts and learning rate @ref r.
@@ -29,7 +31,7 @@ public:
      * @param n the number of contexts
      * @param r the learning rate
      */
-    APM1(const Shared* const sh, int n, int r);
+    APM1(const Shared* sh, int n, int r);
     /**
      * Returns adjusted probability in context @ref cx (0 to n-1).
      * @param pr initial (pre-adjusted) probability

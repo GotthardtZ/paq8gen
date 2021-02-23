@@ -27,7 +27,7 @@ public:
      * @param lim
      * @param mapType
      */
-    StateMap(const Shared* const sh, int s, int n, int lim, MAPTYPE mapType);
+    StateMap(const Shared* sh, int s, int n, int lim, MAPTYPE mapType);
 
     void update() override;
 
@@ -58,7 +58,9 @@ public:
      * @param s
      */
     void skip(uint32_t s);
+#ifndef CHALLENGE
     void print() const;
+#endif
 };
 
 #endif //PAQ8GEN_STATEMAP_HPP

@@ -52,9 +52,11 @@ public:
             break;
           }
         }
+#ifndef CHALLENGE
         if( fMode == FDECOMPRESS && ((i & 0xFFFU) == 0u)) {
           encoder->printStatus();
         }
+#endif
       }
       return count;
     }

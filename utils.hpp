@@ -80,9 +80,11 @@ static_assert(sizeof(int) == 4, "sizeof(int)");
 //uRetVal, DWORD, UINT, TRUE, MAX_PATH, CP_UTF8, etc.
 #endif
 
+#ifndef CHALLENGE
 typedef enum {
   SIMD_NONE, SIMD_SSE2, SIMD_SSSE3, SIMD_AVX2, SIMD_NEON
 } SIMD;
+#endif
 
 
 
@@ -128,17 +130,18 @@ class IntentionalException : public std::exception {};
 
 // Error handler: print message if any, and exit
 [[noreturn]] static void quit(const char *const message = nullptr) {
+#ifndef CHALLENGE
   if( message != nullptr ) {
     printf("\n%s", message);
   }
   printf("\n");
+#endif
   throw IntentionalException();
 }
 
 typedef enum {
   DEFAULT = 0,
   FILECONTAINER,
-  
   TEXT,
   TEXT_EOL,
   Count

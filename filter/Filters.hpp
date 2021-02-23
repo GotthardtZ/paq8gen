@@ -136,14 +136,20 @@ static void directEncodeBlock(BlockType type, File *in, uint64_t len, Encoder &e
   if( info != -1 ) {
     en.encodeInfo(info);
   }
+#ifndef CHALLENGE
   fprintf(stderr, "Compressing... ");
+#endif
   for( uint64_t j = 0; j < len; ++j ) {
+#ifndef CHALLENGE
     if((j & 0xfff) == 0 ) {
       en.printStatus(j, len);
     }
+#endif
     en.compressByte(in->getchar());
   }
+#ifndef CHALLENGE
   fprintf(stderr, "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b");
+#endif
 }
 
 static void compressRecursive(File *in, uint64_t blockSize, Encoder &en, String &blstr, int recursionLevel, float p1, float p2);
@@ -187,13 +193,15 @@ transformEncodeBlock(BlockType type, File *in, uint64_t len, Encoder &en, int in
     }
     // Test fails, compress without transform
     if( diffFound > 0 || tmp.getchar() != EOF) {
+#ifndef CHALLENGE
       printf("Transform fails at %" PRIu64 ", skipping...\n", diffFound - 1);
+#endif
       in->setpos(begin);
       directEncodeBlock(DEFAULT, in, len, en);
     } else {
       tmp.setpos(0);
       if( hasRecursion(type)) {
-        // TODO(epsteina): Large file support
+        // TODO: Large file support
         en.encodeBlockType(type);
         en.encodeBlockSize(tmpSize);
         compressRecursive(&tmp, tmpSize, en, blstr, recursionLevel + 1, p1, p2);
@@ -279,10 +287,11 @@ static void compressRecursive(File *in, const uint64_t blockSize, Encoder &en, S
       }
       blstrSub += uint64_t(blNum);
       blNum++;
-
+#ifndef CHALLENGE
       printf(" %-11s | %-16s |%10" PRIu64 " bytes [%" PRIu64 " - %" PRIu64 "]", blstrSub.c_str(),
              typeNames[type], len, begin, nextBlockStart - 1);
       printf("\n");
+#endif
       transformEncodeBlock(type, in, len, en, info, blstrSub, recursionLevel, p1, p2, begin);
       p1 = p2;
       bytesToGo -= len;
@@ -306,7 +315,9 @@ static void compressfile(const Shared* const shared, const char *filename, uint6
 
   FileDisk in;
   in.open(filename, true);
+#ifndef CHALLENGE
   printf("Block segmentation:\n");
+#endif
   String blstr;
   compressRecursive(&in, fileSize, en, blstr, 0, 0.0F, 1.0F);
   in.close();
@@ -340,9 +351,11 @@ static auto decompressRecursive(File *out, uint64_t blockSize, Encoder &en, FMod
       len = decodeFunc(type, en, nullptr, len, info, out, mode, diffFound);
     } else {
       for( uint64_t j = 0; j < len; ++j ) {
+#ifndef CHALLENGE
         if((j & 0xfff) == 0u ) {
           en.printStatus();
         }
+#endif
         if( mode == FDECOMPRESS ) {
           out->putChar(en.decompressByte());
         } else if( mode == FCOMPARE ) {
@@ -374,15 +387,22 @@ static void decompressFile(const Shared *const shared, const char *filename, FMo
   FileDisk f;
   if( fMode == FCOMPARE ) {
     f.open(filename, true);
+#ifndef CHALLENGE
     printf("Comparing");
+#endif
   } else { //mode==FDECOMPRESS;
     f.create(filename);
+#ifndef CHALLENGE
     printf("Extracting");
+#endif
   }
+#ifndef CHALLENGE
   printf(" %s %" PRIu64 " bytes -> ", filename, fileSize);
+#endif
 
   // Decompress/Compare
   uint64_t r = decompressRecursive(&f, fileSize, en, fMode, 0);
+#ifndef CHALLENGE
   if( fMode == FCOMPARE && (r == 0u) && f.getchar() != EOF) {
     printf("file is longer\n");
   } else if( fMode == FCOMPARE && (r != 0u)) {
@@ -392,6 +412,9 @@ static void decompressFile(const Shared *const shared, const char *filename, FMo
   } else {
     printf("done   \n");
   }
+#else
+// TODO: does `f.getchar()` have any side effects? Does it still _need_ to be called?
+#endif
   f.close();
 }
 

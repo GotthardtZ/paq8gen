@@ -26,7 +26,9 @@ private:
     uint32_t ctx[nST] {0};
     const int hashBits;
     Ilog *ilog = &Ilog::getInstance();
-
+#ifdef CHALLENGE
+    Stretch * stretch = &Stretch::getInstance();
+#endif
     static constexpr uint32_t MINLEN_RM = 5; //minimum length in recovery mode before we "fully recover"
     static constexpr uint32_t MINLEN_RM_LE = 0; //minimum length in recovery mode before we "fully recover" for Low Entropy content (0 = recover immediately)
     static constexpr int LEN1 = 12;

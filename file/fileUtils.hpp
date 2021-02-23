@@ -191,12 +191,17 @@ static void makeDirectories(const char *filename) {
       const char *dirName = path.c_str();
       const int created = makeDir(dirName);
       if( created == 0 ) {
+#ifndef CHALLENGE
         printf("Unable to create directory %s", dirName);
+#endif
         quit();
       }
+#ifndef CHALLENGE
       if( created == 1 ) {
         printf("Created directory %s\n", dirName);
+
       }
+#endif
       path[i] = saveChar;
     }
   }
