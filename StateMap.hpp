@@ -58,9 +58,7 @@ public:
      * @param s
      */
     void skip(uint32_t s);
-#ifndef CHALLENGE
     void print() const;
-#endif
 };
 
 #endif //PAQ8GEN_STATEMAP_HPP

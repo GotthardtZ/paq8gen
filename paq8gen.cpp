@@ -27,11 +27,6 @@
 
 typedef enum { DoNone, DoCompress, DoExtract, DoCompare } WHATTODO;
 
-#ifdef CHALLENGE
-#define printf(fmt, ...) (0)
-#endif
-
-#ifndef CHALLENGE
 static void printHelp() {
   printf("\n"
          "Free under GPL, http://www.gnu.org/licenses/gpl.txt\n\n"
@@ -142,7 +137,6 @@ static void printCommand(const WHATTODO &whattodo) {
 static void printOptions(Shared *shared) {
   printf(" Level          = %d\n", shared->level);
 }
-#endif
 
 auto processCommandLine(int argc, char **argv) -> int {
 #ifndef CHALLENGE
@@ -150,17 +144,13 @@ auto processCommandLine(int argc, char **argv) -> int {
 #endif
   Shared shared;
   try {
-#ifndef CHALLENGE
     if( !shared.toScreen ) { //we need a minimal feedback when redirected
       fprintf(stderr, PROGNAME " archiver v" PROGVERSION " (c) " PROGYEAR ", Matt Mahoney et al.\n");
     }
     printf(PROGNAME " archiver v" PROGVERSION " (c) " PROGYEAR ", Matt Mahoney et al.\n");
-#endif
     // Print help message
     if( argc < 2 ) {
-#ifndef CHALLENGE
       printHelp();
-#endif
       quit();
     }
 
@@ -293,7 +283,6 @@ auto processCommandLine(int argc, char **argv) -> int {
     } else {
       shared.chosenSimd = SIMD_NONE;
     }
-#endif
 
     if( verbose ) {
       printf("\n");
@@ -303,6 +292,7 @@ auto processCommandLine(int argc, char **argv) -> int {
       }
       printf("\n");
     }
+#endif
 
     // Successfully parsed command line arguments
     // Let's check their validity
@@ -564,7 +554,7 @@ auto processCommandLine(int argc, char **argv) -> int {
 #endif
 
 auto main(int argc, char **argv) -> int {
-#ifdef WINDOWS
+#if defined(WINDOWS) && !defined(CHALLENGE)
   // On Windows, argv is encoded in the effective codepage, therefore unsuitable for acquiring command line arguments (file names
   // in our case) not representable in that particular codepage.
   // -> We will recreate argv as UTF8 (like in Linux)

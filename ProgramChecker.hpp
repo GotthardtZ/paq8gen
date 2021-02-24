@@ -5,7 +5,7 @@
 #include <chrono>
 #include <cinttypes>
 #include <cstdint>
-#include <cstdio>
+#include "cstdio.hpp"
 
 #ifndef CHALLENGE
 /**

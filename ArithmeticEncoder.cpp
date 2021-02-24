@@ -1,7 +1,6 @@
 #include "ArithmeticEncoder.hpp"
 #include <cassert>
 #include <cstdint>
-#include <cstdio>
 
 ArithmeticEncoder::ArithmeticEncoder(File* f) : x1(0), x2(0xffffffff), x(0), pending_bits(0), bits_in_B(0), B(0), archive(f) {};
 

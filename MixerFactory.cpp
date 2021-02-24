@@ -1,4 +1,3 @@
-#ifndef CHALLENGE
 #include "MixerFactory.hpp"
 auto MixerFactory::createMixer(const Shared* const sh, const int n, const int m, const int s) -> Mixer * {
 
@@ -20,4 +19,3 @@ auto MixerFactory::createMixer(const Shared* const sh, const int n, const int m,
   assert(false);
   return nullptr;
 }
-#endif

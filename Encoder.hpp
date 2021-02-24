@@ -76,10 +76,10 @@ public:
     auto decodeInfo() -> int;
 
     void setStatusRange(float perc1, float perc2);
-#ifndef CHALLENGE
+
     void printStatus(uint64_t n, uint64_t size) const;
     void printStatus() const;
-#endif
+
 };
 
 

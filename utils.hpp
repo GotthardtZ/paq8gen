@@ -54,7 +54,7 @@ static_assert(sizeof(int) == 4, "sizeof(int)");
 #endif
 
 #include <algorithm>
-#include <cstdio>
+#include "cstdio.hpp"
 // Determining the proper printf() format specifier for 64 bit unsigned integers:
 // - on Windows MSVC and MinGW-w64 use the MSVCRT runtime where it is "%I64u"
 // - on Linux it is "%llu"
@@ -80,12 +80,9 @@ static_assert(sizeof(int) == 4, "sizeof(int)");
 //uRetVal, DWORD, UINT, TRUE, MAX_PATH, CP_UTF8, etc.
 #endif
 
-#ifndef CHALLENGE
 typedef enum {
   SIMD_NONE, SIMD_SSE2, SIMD_SSSE3, SIMD_AVX2, SIMD_NEON
 } SIMD;
-#endif
-
 
 
 static inline auto min(int a, int b) -> int { return std::min<int>(a, b); }
@@ -130,12 +127,10 @@ class IntentionalException : public std::exception {};
 
 // Error handler: print message if any, and exit
 [[noreturn]] static void quit(const char *const message = nullptr) {
-#ifndef CHALLENGE
   if( message != nullptr ) {
     printf("\n%s", message);
   }
   printf("\n");
-#endif
   throw IntentionalException();
 }
 

@@ -32,13 +32,11 @@ public:
     uint32_t p(uint32_t pr, uint32_t cxt);
     void update() override;
 
-#ifndef CHALLENGE
     void print() {
       for (int i = 0; i < 4096; i++) {
         printf("%d\t%d\t%d\n",i,(int)(t[i]>>32), (int)(t[i]&0xffffffff));
       }
     }
-#endif
 };
 
 #endif //PAQ8GEN_APMPOST_HPP

@@ -287,5 +287,8 @@
     <ClInclude Include="APMPost.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cstdio.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

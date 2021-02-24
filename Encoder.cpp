@@ -110,7 +110,7 @@ void Encoder::setStatusRange(float perc1, float perc2) {
   p1 = perc1;
   p2 = perc2;
 }
-#ifndef CHALLENGE
+
 void Encoder::printStatus(uint64_t n, uint64_t size) const {
   fprintf(stderr, "%6.2f%%\b\b\b\b\b\b\b", (p1 + (p2 - p1) * n / (size + 1)) * 100);
   fflush(stderr);
@@ -120,4 +120,4 @@ void Encoder::printStatus() const {
   fprintf(stderr, "%6.2f%%\b\b\b\b\b\b\b", float(size()) / (p2 + 1) * 100);
   fflush(stderr);
 }
-#endif
+

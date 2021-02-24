@@ -4,7 +4,7 @@
 #include "utils.hpp"
 #include <cassert>
 #include <cstdint>
-#include <cstdio>
+
 
 //////////////////////// Hash functions //////////////////////////
 //

@@ -426,6 +426,7 @@
     <ClInclude Include="StateMap.hpp" />
     <ClInclude Include="StateTable.hpp" />
     <ClInclude Include="StationaryMap.hpp" />
+    <ClInclude Include="cstdio.hpp" />
     <ClInclude Include="Stretch.hpp" />
     <ClInclude Include="String.hpp" />
     <ClInclude Include="UpdateBroadcaster.hpp" />

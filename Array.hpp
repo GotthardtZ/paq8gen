@@ -4,7 +4,7 @@
 #include <cstdint>
 #include "utils.hpp"
 #include <cstdlib>
-#include <cstdio>
+#include "cstdio.hpp"
 #include <cassert>
 #include "ProgramChecker.hpp"
 

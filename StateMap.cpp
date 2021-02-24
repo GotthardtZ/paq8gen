@@ -99,11 +99,9 @@ void StateMap::skip(const uint32_t s) {
   numContexts++;
 }
 
-#ifndef CHALLENGE
 void StateMap::print() const {
   for( uint32_t i = 0; i < t.size(); i++ ) {
     uint32_t p0 = t[i] >> 10;
     printf("%d\t%d\n", i, p0);
   }
 }
-#endif

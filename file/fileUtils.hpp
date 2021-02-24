@@ -4,8 +4,7 @@
 #include "../String.hpp"
 #include <cerrno>
 #include <cstdint>
-#include <cstdio>
-#include <cstring>
+#include "../cstdio.hpp"
 #include <sys/stat.h>
 #include <sys/types.h>
 

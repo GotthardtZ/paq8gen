@@ -1,12 +1,7 @@
 #ifndef PAQ8GEN_FILE_HPP
 #define PAQ8GEN_FILE_HPP
 
-#include "../String.hpp"
-#include <cerrno>
 #include <cstdint>
-#include <cstdio>
-#include <cstring>
-#include <sys/stat.h>
 
 /**
  * This is an abstract class for all the required file operations.

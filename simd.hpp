@@ -1,7 +1,6 @@
 #ifndef PAQ8GEN_SIMD_HPP
 #define PAQ8GEN_SIMD_HPP
 
-#ifndef CHALLENGE
 ///////////////////////// SIMD Vectorization detection //////////////////////////////////
 #if (!defined(__ARM_FEATURE_SIMD32) && !defined(__ARM_NEON))
 // Uncomment one or more of the following includes if you plan adding more SIMD dispatching
@@ -118,5 +117,4 @@ static auto simdDetect() -> int {
 #endif
 }
 
-#endif
 #endif //PAQ8GEN_SIMD_HPP

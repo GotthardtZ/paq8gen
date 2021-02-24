@@ -57,8 +57,6 @@ static void trainSimdAvx2(const short *const t, short *const w, int n, const int
 #endif
 }
 
-#ifndef CHALLENGE
-
 #if (defined(__GNUC__) || defined(__clang__)) && (defined(__ARM_FEATURE_SIMD32) || defined(__ARM_NEON))
 static inline int32x4_t _mm_mulhi_epi16(int32x4_t a, int32x4_t b){
   int32x4_t rl = vmull_s16(vget_low_s16(vreinterpretq_s16_s32(a)), vget_low_s16(vreinterpretq_s16_s32(b)));
@@ -173,7 +171,6 @@ static void trainSimdNone(const short *const t, short *const w, int n, const int
     *reinterpret_cast<short*>(&w[n]) = wt;
   }
 }
-#endif
 
 class Mixer : protected IPredictor {
 protected:

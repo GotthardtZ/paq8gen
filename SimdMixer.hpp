@@ -6,9 +6,7 @@
 #include "Mixer.hpp"
 #include "Squash.hpp"
 
-#ifndef CHALLENGE
 template<SIMD simd>
-#endif
 class SIMDMixer : public Mixer {
 private:
     SIMDMixer *mp; /**< points to a Mixer to combine results */
@@ -16,7 +14,7 @@ private:
     /**
      * Define padding requirements.
      */
-#ifndef CHALLENGE
+
     [[nodiscard]] constexpr inline auto simdWidth() const -> int {
       if( simd == SIMD_AVX2 ) {
         return 32 / sizeof(short); // 256 bit (32 byte) data size
@@ -29,23 +27,14 @@ private:
       }
       assert(false);
     }
-#endif
 
 public:
-#ifndef CHALLENGE
     SIMDMixer(const Shared* const sh, const int n, const int m, const int s) : Mixer(sh, ((n + (simdWidth() - 1)) & -(simdWidth())), m, s) {
       assert((this->n & (simdWidth() - 1)) == 0);
       assert(this->m > 0);
       assert(this->s > 0);
-#else
-    SIMDMixer(const Shared* const sh, const int n, const int m, const int s) : Mixer(sh, ((n + 15) & -15), m, s) {
-#endif
 
-#ifndef CHALLENGE
       mp = (s > 1) ? new SIMDMixer<simd>(sh, s, 1, 1) : nullptr;
-#else
-      mp = (s > 1) ? new SIMDMixer(sh, s, 1, 1) : nullptr;
-#endif
     }
 
     ~SIMDMixer() override {
@@ -84,7 +73,6 @@ public:
               if (rate > MIN_LEARNING_RATE_SN) rate--;
               rates[i] = rate;
             }
-#ifndef CHALLENGE
             if (simd == SIMD_NONE) {
               trainSimdNone(&tx[0], &wx[cxt[i] * n], nx, (err * rate) >> 16);
             }
@@ -97,9 +85,6 @@ public:
             else if (simd == SIMD_NEON) {
               trainSimdNeon(&tx[0], &wx[cxt[i] * n], nx, (err * rate) >> 16);
             }
-#else
-            trainSimdAvx2(&tx[0], &wx[cxt[i] * n], nx, (err * rate) >> 16);
-#endif
           }
         }
       }
@@ -114,18 +99,13 @@ public:
       shared->GetUpdateBroadcaster()->subscribe(this);
       assert(scaleFactor > 0);
       //if(mp)printf("nx: %d, numContexts: %d, base: %d\n",nx, numContexts, base); //for debugging: how many inputs do we have?
-#ifndef CHALLENGE
       while( nx & (simdWidth() - 1)) {
-#else
-        while( nx & 15 ) {
-#endif
         tx[nx++] = 0; // pad
       }
       if( mp ) { // combine outputs
         for( uint64_t i = 0; i < numContexts; ++i ) {
           int dp = 0;
           if (cxt[i] != UINT32_MAX) { // valid mixer context (not to skip)
-#ifndef CHALLENGE
             if (simd == SIMD_NONE) {
               dp = dotProductSimdNone(&tx[0], &wx[cxt[i] * n], nx);
             }
@@ -138,9 +118,6 @@ public:
             else if (simd == SIMD_NEON) {
               dp = dotProductSimdNeon(&tx[0], &wx[cxt[i] * n], nx);
             }
-#else
-            dp = dotProductSimdAvx2(&tx[0], &wx[cxt[i] * n], nx);
-#endif
             dp = (dp * scaleFactor) >> 16;
             if (dp < -2047) {
               dp = -2047;
@@ -156,7 +133,6 @@ public:
         return mp->p();
       } // s=1 context
       int dp;
-#ifndef CHALLENGE
       if( simd == SIMD_NONE ) {
         dp = dotProductSimdNone(&tx[0], &wx[cxt[0] * n], nx);
       }
@@ -169,9 +145,6 @@ public:
       else if (simd == SIMD_NEON) {
         dp = dotProductSimdNeon(&tx[0], &wx[cxt[0] * n], nx);
       }
-#else
-      dp = dotProductSimdAvx2(&tx[0], &wx[cxt[0] * n], nx);
-#endif
       dp = (dp * scaleFactor) >> 16;
       return pr[0] = squash(dp);
     }
