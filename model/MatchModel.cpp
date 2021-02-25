@@ -7,9 +7,7 @@ MatchModel::MatchModel(Shared* const sh, const uint64_t hashtablesize, const uin
              {sh, 1, 8 * 256 * 256 + 1, 255, StateMap::Generic},
              {sh, 1, 256 * 256,         255, StateMap::Generic}},
   cm(sh, mapmemorysize, nCM, 64),
-  mapL /* LargeStationaryMap : HashBits, Scale=64, Rate=16  */
-        {sh, nLSM, 20} // effective bits: ~22
-  ,
+ mapL {sh, nLSM, 20}, /* LargeStationaryMap : HashBits, Scale=64, Rate=16  */ //effective bits: ~22
   hashBits(ilog2(uint32_t(hashtable.size())))
 {
   assert(isPowerOf2(hashtablesize));

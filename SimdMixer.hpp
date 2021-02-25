@@ -118,6 +118,9 @@ public:
             else if (simd == SIMD_NEON) {
               dp = dotProductSimdNeon(&tx[0], &wx[cxt[i] * n], nx);
             }
+            else {
+              static_assert("Unknown SIMD parameter");
+            }
             dp = (dp * scaleFactor) >> 16;
             if (dp < -2047) {
               dp = -2047;
@@ -144,6 +147,9 @@ public:
       }
       else if (simd == SIMD_NEON) {
         dp = dotProductSimdNeon(&tx[0], &wx[cxt[0] * n], nx);
+      }
+      else {
+        static_assert("Unknown SIMD parameter");
       }
       dp = (dp * scaleFactor) >> 16;
       return pr[0] = squash(dp);

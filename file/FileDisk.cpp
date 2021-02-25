@@ -20,9 +20,7 @@ auto FileDisk::open(const char *filename, bool mustSucceed) -> bool {
   file = openFile(filename, READ);
   const bool success = (file != nullptr);
   if( !success && mustSucceed ) {
-#ifndef CHALLENGE
     printf("Unable to open file %s (%s)", filename, strerror(errno));
-#endif
     quit();
   }
   return success;
@@ -33,9 +31,7 @@ void FileDisk::create(const char *filename) {
   makeDirectories(filename);
   file = openFile(filename, WRITE);
   if( file == nullptr ) {
-#ifndef CHALLENGE
     printf("Unable to create file %s (%s)", filename, strerror(errno));
-#endif
     quit();
   }
 }
@@ -44,9 +40,7 @@ void FileDisk::createTmp() {
   assert(file == nullptr);
   file = makeTmpFile();
   if( file == nullptr ) {
-#ifndef CHALLENGE
     printf("Unable to create temporary file (%s)", strerror(errno));
-#endif
     quit();
   }
 }
