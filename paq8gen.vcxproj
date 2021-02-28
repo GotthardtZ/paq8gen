@@ -266,7 +266,7 @@
       </UndefinePreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -275,6 +275,7 @@
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Strict</FloatingPointModel>
       <WholeProgramOptimization>true</WholeProgramOptimization>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -307,6 +308,7 @@
       <FloatingPointModel>Strict</FloatingPointModel>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <ExceptionHandling>false</ExceptionHandling>
+      <Optimization>MinSpace</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -314,6 +316,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>
       </GenerateDebugInformation>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithAsserts|x64'">
